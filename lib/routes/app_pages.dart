@@ -25,6 +25,7 @@ import 'package:public_housing/screens/inspection_standards_screen/binding/inspe
 import 'package:public_housing/screens/inspection_standards_screen/screen/inspection_standards_screen.dart';
 import 'package:public_housing/screens/inspection_unit_summary_screen/binding/inspection_unit_summary_binding.dart';
 import 'package:public_housing/screens/inspection_unit_summary_screen/screen/inspection_unit_summary_screen.dart';
+import 'package:public_housing/screens/inspire-v-newdesign/unitScreen/controller/unitScreen_controller.dart';
 import 'package:public_housing/screens/manual_unit_inspection_screen/binding/manual_unit_inspection_binding.dart';
 import 'package:public_housing/screens/manual_unit_inspection_screen/screen/manual_unit_inspection_screen.dart';
 import 'package:public_housing/screens/no_show_screen/binding/no_show_binding.dart';
@@ -45,6 +46,12 @@ import '../screens/inspire-v-newdesign/auth/binding/inpireV-auth_binding.dart';
 import '../screens/inspire-v-newdesign/auth/screen/inpireV-loginScreen.dart';
 import '../screens/inspire-v-newdesign/homeScreen/binding/inpireV-home_Binding.dart';
 import '../screens/inspire-v-newdesign/homeScreen/screen/inpireV-homeScreen.dart';
+import '../screens/inspire-v-newdesign/standard_screen/binding/inspireV_standardScreen_binding.dart';
+import '../screens/inspire-v-newdesign/standard_screen/screen/inpireV_standardScreen.dart';
+import '../screens/inspire-v-newdesign/unitDeficiencyScreen/controller/unitDeficiencyScreen_controller.dart';
+import '../screens/inspire-v-newdesign/unitDeficiencyScreen/screen/unitDeficiencyScreen.dart';
+import '../screens/inspire-v-newdesign/unitScreen/binding/unitScreen_binding.dart';
+import '../screens/inspire-v-newdesign/unitScreen/screen/unitScreen.dart';
 import '../screens/inspire-v-newdesign/welcomescreen/binding/inpireV_welcome_binding.dart';
 import '../screens/inspire-v-newdesign/welcomescreen/screen/inpirev_welcomeScreen.dart';
 import '../screens/quic_fail_defeciency_listing/controller/quic_fail_defeciency_listing_controller.dart';
@@ -311,7 +318,7 @@ class AppPages {
       }),
     ),
 
-    // inspire
+                            // inspire
     GetPage(
       name: InspireVSigningScreen.routes,
       page: () => const InspireVSigningScreen(),
@@ -326,6 +333,29 @@ class AppPages {
       name: InspireVSelectionScreen.routes,
       page: () => const InspireVSelectionScreen(),
       binding: InspireVSelectionBinding(),
+    ),
+
+    GetPage(
+      name: InspireVStandardScreen.routes,
+      page: () => const InspireVStandardScreen(),
+      binding: InspireVStandardScreenBinding(),
+    ),
+
+
+    GetPage(
+      name: InspireVUnitScreen.routes,
+      page: () => const InspireVUnitScreen(),
+      binding: BindingsBuilder(() {
+        Get.lazyPut< InspireVUnitScreenController>(() => InspireVUnitScreenController());
+      }),
+    ),
+
+    GetPage(
+      name: InspireVUnitDeficiencyScreen.routes,
+      page: () => const InspireVUnitDeficiencyScreen(),
+      binding: BindingsBuilder(() {
+        Get.lazyPut< InspireVUnitDeficiencyScreenController>(() => InspireVUnitDeficiencyScreenController());
+      }),
     ),
 
   ];

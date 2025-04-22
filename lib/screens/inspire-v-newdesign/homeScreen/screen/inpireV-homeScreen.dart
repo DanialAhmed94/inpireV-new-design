@@ -452,14 +452,15 @@ class InspireVHomeScreen extends StatelessWidget {
                               // date + time
                               Row(
                                 children: [
-                                  Icon(Icons.calendar_today, size: 16.px),
+                                  Icon(Icons.calendar_today, size: 16.px,color: AppColors.primerColor,),
                                   const SizedBox(width: 4),
                                   Text(
                                     DateFormat('MM/dd/yyyy').format(item.date),
                                     style: TextStyle(fontSize: 14.px),
                                   ),
                                   const SizedBox(width: 16),
-                                  Icon(Icons.access_time, size: 16.px),
+
+                                  SvgPicture.string(clockIcon,height: 16.px,width: 16.px,),
                                   const SizedBox(width: 4),
                                   Text(
                                     item.timeRange,
@@ -624,7 +625,7 @@ class InspireVHomeScreen extends StatelessWidget {
                                     // Bedrooms block
                                     Row(
                                       children: [
-                                        Icon(Icons.bed, size: 20.px),
+                                        Icon(Icons.bed, size: 20.px,color:AppColors.primerColor),
                                         SizedBox(width: 4.px),
                                         Text(
                                           'Bedrooms',
@@ -681,7 +682,8 @@ class InspireVHomeScreen extends StatelessWidget {
                                     // Bathrooms block
                                     Row(
                                       children: [
-                                        Icon(Icons.bathtub, size: 20.px),
+
+                                        SvgPicture.string(bathroomIcon,height: 20.px,width: 20.px,),
                                         SizedBox(width: 4.px),
                                         Text(
                                           'Bathrooms',
@@ -745,7 +747,7 @@ class InspireVHomeScreen extends StatelessWidget {
                                     ),
                                     const SizedBox(width: 18),
                                     OutlinedButton(
-                                      onPressed: () {},
+                                      onPressed: () =>_quickPassDialog( Get.context!, controller),
                                       child: Text(
                                         'Quick Pass',
                                         style: TextStyle(
@@ -756,7 +758,7 @@ class InspireVHomeScreen extends StatelessWidget {
                                     const Spacer(),
                                     CommonButton(
                                       title: "Start Inspection",
-                                      onTap: () {},
+                                      onTap: () {controller.onStartInpectionTap();},
                                       color: AppColors().appColor,
                                     ),
                                   ],
@@ -969,7 +971,7 @@ class InspireVHomeScreen extends StatelessWidget {
                   Text(
                     'No Show',
                     style: TextStyle(
-                        fontSize: 20.px, fontWeight: FontWeight.w600),
+                        fontSize: 32.px, fontWeight: FontWeight.w600,fontFamily: "Roboto"),
                   ),
                   SizedBox(height: 20.px),
 
@@ -1186,4 +1188,246 @@ class InspireVHomeScreen extends StatelessWidget {
     // … inside your GetBuilder …
 
   }
+  void _quickPassDialog(BuildContext ctx, InspireVHomeScreenController ctl) {
+    showDialog(
+      context: ctx,
+      barrierDismissible: false,
+      builder: (_) =>
+          Dialog(
+            backgroundColor: Colors.white,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16.px),
+            ),
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 24.px, vertical: 20.px),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  // ── Title ───────────────────────────────────────
+                  Text(
+                    'Pass Unit Inspection',
+                    style: TextStyle(
+                        fontSize: 32.px, fontWeight: FontWeight.w600,fontFamily: "Roboto"),
+                  ),
+                  Text(
+                    'You will quick pass the Inspection',
+                    style: TextStyle(
+                        fontSize: 16.px, fontWeight: FontWeight.w400,fontFamily: "Roboto"),
+                  ),
+                  SizedBox(height: 20.px),
+
+                  // ── Reactive Carousel ───────────────────────────
+                  GetBuilder<InspireVHomeScreenController>(
+                    builder: (c) {
+                      return Container(
+                        height: 100.px,
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          color: Colors.grey.shade200,
+                          borderRadius: BorderRadius.circular(12.px),
+                        ),
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 16.px),
+                          child: c.imageList.isEmpty
+                          // ── State 1: Before any image ─────────────
+                              ? GestureDetector(
+                            onTap: c.imagePicker,
+                            child: Container(
+                              height: 76.px,
+                              decoration: BoxDecoration(
+                                color: Colors.transparent,
+                                borderRadius: BorderRadius.circular(8.px),
+                              ),
+                              child: Row(
+                                children: [
+                                  Container(
+                                    width: 60.px,
+                                    alignment: Alignment.center,
+                                    child: SvgPicture.string(
+                                      addCameraIcon,
+                                      width: 32.px,
+                                      height: 32.px,
+                                      color: AppColors.primerColor,
+                                    ),
+                                  ),
+                                  VerticalDivider(
+                                    color: Colors.grey.shade300,
+                                    thickness: 1,
+                                  ),
+                                  Expanded(
+                                    child: Padding(
+                                      padding:
+                                      EdgeInsets.symmetric(vertical: 8.px),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                        mainAxisAlignment:
+                                        MainAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            'Picture required',
+                                            style: TextStyle(
+                                              fontSize: 16.px,
+                                              fontWeight: FontWeight.w600,
+                                              color: AppColors.primerColor,
+                                            ),
+                                          ),
+                                          Text(
+                                            'before continue',
+                                            style:
+                                            TextStyle(fontSize: 14.px),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          )
+                          // ── State 2: After images added ────────────
+                              : Row(
+                            children: [
+                              // ── Scrollable add + thumbs ───────────────────────
+                              Expanded(
+                                child: SingleChildScrollView(
+                                  scrollDirection: Axis.horizontal,
+                                  child: Row(
+                                    children: [
+                                      // 1) Add tile + divider
+                                      GestureDetector(
+                                        onTap: c.imagePicker,
+                                        child: Container(
+                                          height: 76.px,
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 8.px),
+                                          decoration: BoxDecoration(
+                                            color: Colors.white,
+                                            borderRadius: BorderRadius.circular(
+                                                8.px),
+                                          ),
+                                          child: Row(
+                                            children: [
+                                              SvgPicture.string(
+                                                addCameraIcon,
+                                                width: 32.px,
+                                                height: 32.px,
+                                                color: AppColors.primerColor,
+                                              ),
+                                              SizedBox(width: 8.px),
+                                              Container(
+                                                width: 1.px,
+                                                height: 48.px,
+                                                color: Colors.grey.shade300,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+
+                                      SizedBox(width: 8.px),
+
+                                      // 2) Thumbnails
+                                      for (var i = 0; i <
+                                          c.imageList.length; i++) ...[
+                                        Stack(
+                                          children: [
+                                            Container(
+                                              width: 76.px,
+                                              height: 76.px,
+                                              decoration: BoxDecoration(
+                                                color: Colors.white,
+                                                borderRadius: BorderRadius
+                                                    .circular(8.px),
+                                              ),
+                                              child: ClipRRect(
+                                                borderRadius: BorderRadius
+                                                    .circular(8.px),
+                                                child: c.imageList[i]
+                                                    .startsWith('http')
+                                                    ? CachedNetworkImage(
+                                                  imageUrl: c.imageList[i],
+                                                  fit: BoxFit.cover,
+                                                )
+                                                    : Image.file(
+                                                  File(c.imageList[i]),
+                                                  fit: BoxFit.cover,
+                                                ),
+                                              ),
+                                            ),
+                                            Positioned(
+                                              top: 4.px,
+                                              right: 4.px,
+                                              child: GestureDetector(
+                                                onTap: () => c.removeImage(i),
+                                                child: Container(
+                                                  decoration: BoxDecoration(
+                                                    color: Colors.red,
+                                                    shape: BoxShape.circle,
+                                                  ),
+                                                  padding: EdgeInsets.all(2.px),
+                                                  child: Icon(
+                                                      Icons.close, size: 16.px,
+                                                      color: Colors.white),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        SizedBox(width: 8.px),
+                                      ],
+                                    ],
+                                  ),
+                                ),
+                              ),
+
+                              // ── Spacer pushes ✔ to the far right ───────────────
+                              Spacer(),
+
+                              // 3) Confirm tile
+                              GestureDetector(
+                                onTap: () => Navigator.of(Get.context!).pop(),
+                                child: Center(
+                                  child: SvgPicture.string(
+                                    successIcon,
+                                    width: 32.px,
+                                    height: 32.px,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+
+                  SizedBox(height: 24.px),
+
+                  // ── Action Buttons ────────────────────────────
+                  Row(
+                    children: [
+                      TextButton(
+                        onPressed: () => Navigator.of(ctx).pop(),
+                        child: Text(
+                          'Cancel',
+                          style: TextStyle(
+                            fontSize: 16.px,
+                            color: AppColors.primerColor,
+                          ),
+                        ),
+                      ),
+                      Spacer(),
+                      CommonButton(title: "Complete Inspection", onTap: (){Navigator.of(ctx).pop();},color: AppColors.primerColor,)
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+    );
+    // … inside your GetBuilder …
+
   }
+
+}

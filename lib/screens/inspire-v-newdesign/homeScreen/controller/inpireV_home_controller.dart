@@ -13,6 +13,7 @@ import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 import '../../../deficiencies_inside_screen/Repository/deficiencies_inside_repository.dart';
 import '../../../deficiencies_inside_screen/controller/deficiencies_inside_controller.dart';
 import '../../../quic_fails_inspection_screen/screen/area_listing_screen.dart';
+import '../../standard_screen/screen/inpireV_standardScreen.dart';
 
 enum PropertyStatus { completed, scheduled }
 
@@ -111,6 +112,16 @@ class InspireVHomeScreenController extends BaseController {
       inspections[idx].bathrooms--;
       update();
     }
+  }
+
+  void onStartInpectionTap() {
+    // for now just log to console
+    debugPrint(
+      'Start Inpection tapped → '
+
+    );
+    Get.toNamed(InspireVStandardScreen.routes);
+
   }
   actionPopUpItemSelected(int value) {
     ScaffoldMessenger.of(Get.context!).hideCurrentSnackBar;
