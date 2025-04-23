@@ -561,7 +561,7 @@ class InspireVHomeScreen extends StatelessWidget {
                                 ),
                                 const SizedBox(height: 4),
                                 TextField(
-                                  readOnly: false,
+                                  readOnly: true,
                                   controller: TextEditingController(
                                       text: item.comments.isEmpty
                                           ? ''

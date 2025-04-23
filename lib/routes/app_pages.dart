@@ -48,6 +48,8 @@ import '../screens/inspire-v-newdesign/homeScreen/binding/inpireV-home_Binding.d
 import '../screens/inspire-v-newdesign/homeScreen/screen/inpireV-homeScreen.dart';
 import '../screens/inspire-v-newdesign/standard_screen/binding/inspireV_standardScreen_binding.dart';
 import '../screens/inspire-v-newdesign/standard_screen/screen/inpireV_standardScreen.dart';
+import '../screens/inspire-v-newdesign/unitDeficiencyDetailScreen/controller/unitDeficiencyDetailScreen_controller.dart';
+import '../screens/inspire-v-newdesign/unitDeficiencyDetailScreen/screen/unitDeficiencyDetailScreen_screen.dart';
 import '../screens/inspire-v-newdesign/unitDeficiencyScreen/controller/unitDeficiencyScreen_controller.dart';
 import '../screens/inspire-v-newdesign/unitDeficiencyScreen/screen/unitDeficiencyScreen.dart';
 import '../screens/inspire-v-newdesign/unitScreen/binding/unitScreen_binding.dart';
@@ -355,6 +357,14 @@ class AppPages {
       page: () => const InspireVUnitDeficiencyScreen(),
       binding: BindingsBuilder(() {
         Get.lazyPut< InspireVUnitDeficiencyScreenController>(() => InspireVUnitDeficiencyScreenController());
+      }),
+    ),
+
+    GetPage(
+      name: InpireVUnitDeficiencyDetailScreen.routes,
+      page: () => const InpireVUnitDeficiencyDetailScreen(),
+      binding: BindingsBuilder(() {
+        Get.lazyPut< InpireVUnitDeficiencyDetailScontroller>(() => InpireVUnitDeficiencyDetailScontroller());
       }),
     ),
 

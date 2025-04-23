@@ -202,6 +202,7 @@ class InspireVUnitScreen extends GetView<InspireVUnitScreenController> {
                                     ),
                                   ],
                                 ),
+
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [

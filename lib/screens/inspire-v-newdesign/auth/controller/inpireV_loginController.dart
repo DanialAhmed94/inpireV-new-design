@@ -5,7 +5,7 @@ import '../../welcomescreen/screen/inpirev_welcomeScreen.dart';
 
 class InspireVSigningController extends GetxController {
   /// Dummy clients for the dropdown (replace with real data later if needed)
-  final clients = <String>['Client A', 'Client B', 'Client C'].obs;
+  final clients = <String>['Dev', 'Newport', 'Chattanooga','Marin','DCHA','HACLA'].obs;
 
   /// Currently selected client
   final Rxn<String> selectedClient = Rxn<String>();
@@ -17,9 +17,7 @@ class InspireVSigningController extends GetxController {
   void onInit() {
     super.onInit();
     // initialize dropdown
-    if (clients.isNotEmpty) {
-      selectedClient.value = clients.first;
-    }
+
   }
 
   /// Stub: called when “Log in” is tapped

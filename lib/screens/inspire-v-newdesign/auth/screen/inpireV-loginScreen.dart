@@ -84,7 +84,7 @@ class InspireVSigningScreen extends GetView<InspireVSigningController> {
                                 value: selected,
                                 hint: Text(
                                   'Select your client',
-                                  style: TextStyle(color: Colors.white54, fontSize: 16),
+                                  style: TextStyle(color: Colors.white, fontSize: 16),
                                 ),
                                 items: list.map((c) {
                                   return DropdownMenuItem(

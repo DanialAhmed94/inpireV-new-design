@@ -26,6 +26,7 @@ class InspireVHomeScreenController extends BaseController {
   PropertyStatus status = PropertyStatus.scheduled;
   DateTime? startDateTime = DateTime.now();
   DateTime? endDateTime = DateTime.now();
+
   /// The list we’ll drive the UI from
   final inspections = <InspectionItem>[];
   List<String> imageList = [];
@@ -38,52 +39,53 @@ class InspireVHomeScreenController extends BaseController {
     // TODO: replace with real data fetch
     inspections.addAll([
       InspectionItem(
-        address: '2113 Kendall Street',
-        location: 'South Bend, IN',
-        tenantName: 'Fernando Devries',
-        tenantPhone: '555‑5555‑5555',
-        landlordName: 'Fernando Devries',
-        landlordPhone: '555‑5555‑5555',
-        date: DateTime(2023, 6, 22),
-        timeRange: '08:00 - 10:00',
-        tagLabel: 'Annual Inspection',
-      ),
+          address: '2113 Kendall Street',
+          location: 'South Bend, IN',
+          tenantName: 'Fernando Devries',
+          tenantPhone: '555‑5555‑5555',
+          landlordName: 'Fernando Devries',
+          landlordPhone: '555‑5555‑5555',
+          date: DateTime(2023, 6, 22),
+          timeRange: '08:00 - 10:00',
+          tagLabel: 'Annual Inspection',
+          comments: "4 of 10 cabinets are missing -PM"),
       InspectionItem(
-        address: '2113 Kendall Street',
-        location: 'South Bend, IN',
-        tenantName: 'Fernando Devries',
-        tenantPhone: '555‑5555‑5555',
-        landlordName: 'Fernando Devries',
-        landlordPhone: '555‑5555‑5555',
-        date: DateTime(2023, 6, 22),
-        timeRange: '08:00 - 10:00',
-        tagLabel: 'Annual Inspection',
-      ),
+          address: '2113 Kendall Street',
+          location: 'South Bend, IN',
+          tenantName: 'Fernando Devries',
+          tenantPhone: '555‑5555‑5555',
+          landlordName: 'Fernando Devries',
+          landlordPhone: '555‑5555‑5555',
+          date: DateTime(2023, 6, 22),
+          timeRange: '08:00 - 10:00',
+          tagLabel: 'Annual Inspection',
+          comments: "4 of 10 cabinets are missing -PM"),
       InspectionItem(
-        address: '2113 Kendall Street',
-        location: 'South Bend, IN',
-        tenantName: 'Fernando Devries',
-        tenantPhone: '555‑5555‑5555',
-        landlordName: 'Fernando Devries',
-        landlordPhone: '555‑5555‑5555',
-        date: DateTime(2023, 6, 22),
-        timeRange: '08:00 - 10:00',
-        tagLabel: 'Annual Inspection',
-      ),
+          address: '2113 Kendall Street',
+          location: 'South Bend, IN',
+          tenantName: 'Fernando Devries',
+          tenantPhone: '555‑5555‑5555',
+          landlordName: 'Fernando Devries',
+          landlordPhone: '555‑5555‑5555',
+          date: DateTime(2023, 6, 22),
+          timeRange: '08:00 - 10:00',
+          tagLabel: 'Annual Inspection',
+          comments: "4 of 10 cabinets are missing -PM"),
       InspectionItem(
-        address: '2113 Kendall Street',
-        location: 'South Bend, IN',
-        tenantName: 'Fernando Devries',
-        tenantPhone: '555‑5555‑5555',
-        landlordName: 'Fernando Devries',
-        landlordPhone: '555‑5555‑5555',
-        date: DateTime(2023, 6, 22),
-        timeRange: '08:00 - 10:00',
-        tagLabel: 'Annual Inspection',
-      ),
+          address: '2113 Kendall Street',
+          location: 'South Bend, IN',
+          tenantName: 'Fernando Devries',
+          tenantPhone: '555‑5555‑5555',
+          landlordName: 'Fernando Devries',
+          landlordPhone: '555‑5555‑5555',
+          date: DateTime(2023, 6, 22),
+          timeRange: '08:00 - 10:00',
+          tagLabel: 'Annual Inspection',
+          comments: "4 of 10 cabinets are missing -PM"),
       // … add more …
     ]);
   }
+
   /// Called by the UI when the tile expands/collapses
   void toggleExpansion(int index, bool expanded) {
     inspections[index].isExpanded = expanded;
@@ -116,13 +118,10 @@ class InspireVHomeScreenController extends BaseController {
 
   void onStartInpectionTap() {
     // for now just log to console
-    debugPrint(
-      'Start Inpection tapped → '
-
-    );
+    debugPrint('Start Inpection tapped → ');
     Get.toNamed(InspireVStandardScreen.routes);
-
   }
+
   actionPopUpItemSelected(int value) {
     ScaffoldMessenger.of(Get.context!).hideCurrentSnackBar;
     String message;
@@ -156,6 +155,7 @@ class InspireVHomeScreenController extends BaseController {
     final DateFormat format2 = DateFormat('yyyy-MM-dd');
     return format2.format(date);
   }
+
   bool confirmSelectedDates() {
     if (startDate != '' && endDate != '') {
       isDateSelected = true;
@@ -212,15 +212,16 @@ class InspireVHomeScreenController extends BaseController {
   }
 
   Future<void> getFromGallery() async {
-    final pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery, imageQuality: 25);
+    final pickedFile = await ImagePicker()
+        .pickImage(source: ImageSource.gallery, imageQuality: 25);
     if (pickedFile != null) await _handlePickedFile(pickedFile);
   }
 
   Future<void> getFromCamera() async {
-    final pickedFile = await ImagePicker().pickImage(source: ImageSource.camera, imageQuality: 25);
+    final pickedFile = await ImagePicker()
+        .pickImage(source: ImageSource.camera, imageQuality: 25);
     if (pickedFile != null) await _handlePickedFile(pickedFile);
   }
-
 
   Future<void> _handlePickedFile(XFile pickedFile) async {
     final tempDir = await getTemporaryDirectory();
@@ -240,29 +241,26 @@ class InspireVHomeScreenController extends BaseController {
     if (editedBytes == null) return;
 
     // 1) write to local & show immediately
-    final localFile = File(
-        '${tempDir.path}/${DateTime.now().millisecondsSinceEpoch}.png'
-    )..createSync()..writeAsBytesSync(editedBytes);
+    final localFile =
+        File('${tempDir.path}/${DateTime.now().millisecondsSinceEpoch}.png')
+          ..createSync()
+          ..writeAsBytesSync(editedBytes);
 
     imageList.add(localFile.path);
     imageUploadStatus = ImageUploadStatus.success;
-    update();  // ← dialog rebuilds here, showing your thumbnail
+    update(); // ← dialog rebuilds here, showing your thumbnail
 
     // 2) now do the server call
     imageUploadStatus = ImageUploadStatus.uploading;
     update();
-    final resp = await DeficienciesInsideRepository().getImageUpload(
-        filePath: localFile.path
-    );
-    resp.fold(
-            (l) => imageUploadStatus = ImageUploadStatus.initial,
-            (r) {
-          final url = r.images?.image ?? localFile.path;
-          final idx = imageList.indexOf(localFile.path);
-          if (idx != -1) imageList[idx] = url;
-          imageUploadStatus = ImageUploadStatus.success;
-        }
-    );
+    final resp = await DeficienciesInsideRepository()
+        .getImageUpload(filePath: localFile.path);
+    resp.fold((l) => imageUploadStatus = ImageUploadStatus.initial, (r) {
+      final url = r.images?.image ?? localFile.path;
+      final idx = imageList.indexOf(localFile.path);
+      if (idx != -1) imageList[idx] = url;
+      imageUploadStatus = ImageUploadStatus.success;
+    });
     update();
   }
 
@@ -304,7 +302,9 @@ class InspireVHomeScreenController extends BaseController {
 
   removeImage(int index) {
     imageList.removeAt(index);
-    imageUploadStatus = imageList.isEmpty ? ImageUploadStatus.initial : ImageUploadStatus.success;
+    imageUploadStatus = imageList.isEmpty
+        ? ImageUploadStatus.initial
+        : ImageUploadStatus.success;
     update();
   }
 
@@ -330,6 +330,7 @@ class InspectionItem {
   bool isExpanded;
   int bedrooms;
   int bathrooms;
+
   InspectionItem({
     required this.address,
     required this.location,
