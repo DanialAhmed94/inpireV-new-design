@@ -13,6 +13,7 @@ import 'package:get/get_state_manager/src/simple/get_view.dart';
 import '../../../../commons/all.dart';
 import '../../../../commons/appcolors.dart';
 import '../../../../commons/common_widgets/base_widgets.dart';
+import '../../unitScreen/controller/unitScreen_controller.dart';
 import '../controller/unitDeficiencyDetailScreen_controller.dart';
 
 class InpireVUnitDeficiencyDetailScreen
@@ -429,11 +430,30 @@ class InpireVUnitDeficiencyDetailScreen
                                   if (controller.visibleBtn &&
                                       controller
                                           .commentController.text.isNotEmpty) {
+                                    //test
+                                    // Get original navigation arguments
+                                    final areaName = controller.areaName;
+                                    final detailName = controller.detail;
+                                  final defiindex = Get.arguments["deficiencyIndex"];
+                                    print("****${areaName} ${detailName} ${defiindex}");
+                                    // Update BOTH controllers
                                     controller.saveChanges();
+
+                                    // 1. Update UnitScreen's completion status
+                                    Get.find<InspireVUnitScreenController>()
+                                        .markDetailCompleted(areaName);
+
+                                    // 2. Pass back deficiency index for DeficiencyScreen
                                     Get.back(result: {
-                                      "deficiencyIndex":
-                                          controller.deficiencyIndex,
+                                      "deficiencyIndex": controller.deficiencyIndex,
                                     });
+
+                                   // perfect
+                                    // controller.saveChanges();
+                                    // Get.back(result: {
+                                    //   "deficiencyIndex":
+                                    //       controller.deficiencyIndex,
+                                    // });
                                   }
                                 },
                               ).paddingSymmetric(vertical: 48.px),
@@ -606,7 +626,7 @@ class _DeficiencyRadioCardState extends State<_DeficiencyRadioCard> {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.px)),
       child: Column(
         children: [
-          _buildOption("${Strings.correctionTimeframeQF}"),
+          _buildOption("${Strings.deficiencyPresentQF}"),
           _buildOption("${Strings.inconclusiveQF}"),
         ],
       ),

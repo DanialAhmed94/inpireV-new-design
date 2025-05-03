@@ -1,19 +1,7 @@
 import 'package:get/get.dart';
 import '../../../../commons/common_widgets/base_widgets.dart';
 
-class InspireVUnitScreenController extends BaseController {
-
-
-  //test
-  final RxMap<String, bool> completedDetails = <String, bool>{}.obs;
-
-  void markDetailCompleted(String areaName,) {
-    completedDetails['$areaName'] = true;
-    update();
-  }
-
-
-
+class InspireVInsideUnitScreenController extends BaseController {
   /// #0. Dummy list of selectable area items
   final availableAreas = <AreaItem>[
     AreaItem(
@@ -185,27 +173,60 @@ class InspireVUnitScreenController extends BaseController {
   /// #1. Areas list with default values
   final areas = <AreaItem>[
     AreaItem(
-      baseName: 'Living Room',
+      baseName: 'Electrical Rooms',
       expanded: false.obs,
       count: 1,
       details: [
-        "Lighting - interior",
-        "Minimum Electrical and Lighting",
-        "Carbon Monoxide Alarm",
-        "Smoke Alarm",
-        "Ceiling",
-        "Wall - interior",
-        "Floor",
-        "Window",
-        "Door - General",
-        "Electrical - conductor, outlet, and switch",
-        "Electrical - GFCI or AFCI - outlet or breaker",
-        "Electrical - service panel",
-        "Heating, ventilation, and air conditioning...",
+        "Bathtub and Shower Standard",
+        "Call-for-Aid System Standard",
+        "Cabinet and Storage",
+        "Ceiling Standard",
+        "Chimney Standard",
+        "Clothes Dryer Exhaust Ventilation Standard",
+        "Door – Entry Standard",
+        "Door – Fire Labeled Standard",
+        "Door – General Standard",
+        "Drain Standard",
+        "Egress Standard",
+        "Electrical – GFCI or AFCI – Outlet or Breaker Standard",
+        "Electrical – Service Panel Standard",
+        "Elevator Standard",
+        "Exit Sign Standard",
+        "Fire Extinguisher Standard",
+        "Flammable and Combustible Item Standard",
+        "Floor Standard",
+        "Foundation Standard",
+        "Garage Door Standard",
+        "Grab Bar Standard",
+        "Handrail Standard",
+        "Guardrail Standard",
+        "Heating, Ventilation, and Air Conditioning (HVAC) Standard",
+        "Infestation Standard",
+        "Leak – Gas or Oil",
+        "Leak – Sewage System",
+        "Lighting – Auxiliary Standard",
+        "Lighting – Interior Standard",
+        "Litter Standard",
+        "Mold-Like Substance Standard",
+        "Potential Lead-Based Paint Hazards – Visual Assessment Standard",
+        "Refrigerator Standard",
+        "Sharp Edges Standard",
+        "Sink Standard",
+        "Smoke Alarm Standard",
+        "Sprinkler Assembly Standard",
+        "Steps and Stairs Standard",
+        "Structural System Standard",
+        "Toilet Standard",
+        "Trash Chute Standard",
+        "Trip Hazard Standard",
+        "Ventilation",
+        "Wall – Interior Standard",
+        "Window Standard",
+
       ],
     ),
     AreaItem(
-      baseName: 'Kitchen',
+      baseName: 'Elevators',
       expanded: false.obs,
       count: 1,
       details: [
@@ -233,7 +254,7 @@ class InspireVUnitScreenController extends BaseController {
       ],
     ),
     AreaItem(
-      baseName: 'Bedroom',
+      baseName: 'Emergency Corridors',
       expanded: false.obs,
       count: 1,
       details: [
@@ -244,7 +265,7 @@ class InspireVUnitScreenController extends BaseController {
       ],
     ),
     AreaItem(
-      baseName: 'Bathroom',
+      baseName: 'Indoor Recreational Areas',
       expanded: false.obs,
       count: 1,
       details: [
@@ -257,7 +278,127 @@ class InspireVUnitScreenController extends BaseController {
       ],
     ),
     AreaItem(
-      baseName: 'Basement',
+      baseName: 'Indoor Trash Rooms',
+      expanded: false.obs,
+      count: 1,
+      details: [
+        "Lighting - interior",
+        "Foundation & Walls",
+        "Moisture & Water Leaks",
+        "Heating System",
+        "Electrical Panel",
+      ],
+    ),
+    AreaItem(
+      baseName: 'Main Interior Entrances',
+      expanded: false.obs,
+      count: 1,
+      details: [
+        "Lighting - interior",
+        "Foundation & Walls",
+        "Moisture & Water Leaks",
+        "Heating System",
+        "Electrical Panel",
+      ],
+    ),
+    AreaItem(
+      baseName: 'Maintenance Rooms',
+      expanded: false.obs,
+      count: 1,
+      details: [
+        "Lighting - interior",
+        "Foundation & Walls",
+        "Moisture & Water Leaks",
+        "Heating System",
+        "Electrical Panel",
+      ],
+    ),
+    AreaItem(
+      baseName: 'Mechanical Rooms',
+      expanded: false.obs,
+      count: 1,
+      details: [
+        "Lighting - interior",
+        "Foundation & Walls",
+        "Moisture & Water Leaks",
+        "Heating System",
+        "Electrical Panel",
+      ],
+    ),
+    AreaItem(
+      baseName: 'Shared Laundry Rooms',
+      expanded: false.obs,
+      count: 1,
+      details: [
+        "Lighting - interior",
+        "Foundation & Walls",
+        "Moisture & Water Leaks",
+        "Heating System",
+        "Electrical Panel",
+      ],
+    ),
+    AreaItem(
+      baseName: 'Shared Storage Rooms',
+      expanded: false.obs,
+      count: 1,
+      details: [
+        "Lighting - interior",
+        "Foundation & Walls",
+        "Moisture & Water Leaks",
+        "Heating System",
+        "Electrical Panel",
+      ],
+    ),
+    AreaItem(
+      baseName: 'Stairwells',
+      expanded: false.obs,
+      count: 1,
+      details: [
+        "Lighting - interior",
+        "Foundation & Walls",
+        "Moisture & Water Leaks",
+        "Heating System",
+        "Electrical Panel",
+      ],
+    ),
+    AreaItem(
+      baseName: 'Community Rooms',
+      expanded: false.obs,
+      count: 1,
+      details: [
+        "Lighting - interior",
+        "Foundation & Walls",
+        "Moisture & Water Leaks",
+        "Heating System",
+        "Electrical Panel",
+      ],
+    ),
+    AreaItem(
+      baseName: 'Interior Hallways',
+      expanded: false.obs,
+      count: 1,
+      details: [
+        "Lighting - interior",
+        "Foundation & Walls",
+        "Moisture & Water Leaks",
+        "Heating System",
+        "Electrical Panel",
+      ],
+    ),
+    AreaItem(
+      baseName: 'Lobbies',
+      expanded: false.obs,
+      count: 1,
+      details: [
+        "Lighting - interior",
+        "Foundation & Walls",
+        "Moisture & Water Leaks",
+        "Heating System",
+        "Electrical Panel",
+      ],
+    ),
+    AreaItem(
+      baseName: 'Mail Rooms',
       expanded: false.obs,
       count: 1,
       details: [
@@ -317,9 +458,6 @@ class InspireVUnitScreenController extends BaseController {
     );
     update();
   }
-
-
-
 }
 
 /// AreaItem model without areaType
@@ -328,9 +466,6 @@ class AreaItem {
   final RxBool expanded;
   final int count;
   final List<String> details;
-
-  //test
-  RxBool hasCompletedDetails = false.obs;
 
   AreaItem({
     required this.baseName,

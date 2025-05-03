@@ -46,6 +46,18 @@ import '../screens/inspire-v-newdesign/auth/binding/inpireV-auth_binding.dart';
 import '../screens/inspire-v-newdesign/auth/screen/inpireV-loginScreen.dart';
 import '../screens/inspire-v-newdesign/homeScreen/binding/inpireV-home_Binding.dart';
 import '../screens/inspire-v-newdesign/homeScreen/screen/inpireV-homeScreen.dart';
+import '../screens/inspire-v-newdesign/insideUnitScreen/controller/insideUnitScreen_controller.dart';
+import '../screens/inspire-v-newdesign/insideUnitScreen/screen/insideUnitScreen.dart';
+import '../screens/inspire-v-newdesign/outsideUnitScreen/controller/outsideUnitScreen_controller.dart';
+import '../screens/inspire-v-newdesign/outsideUnitScreen/screen/outsideUnitScreen.dart';
+import '../screens/inspire-v-newdesign/quickPassInspectionSummary/binding/quickPassInspectionSummary_binding.dart';
+import '../screens/inspire-v-newdesign/quickPassInspectionSummary/screen/quickPassInspectionSummary_screen.dart';
+import '../screens/inspire-v-newdesign/quickPassInspection_UnitScreen/controller/quickPassInspection_UnitScreenController.dart';
+import '../screens/inspire-v-newdesign/quickPassInspection_UnitScreen/screen/quickPassInspection_UnitScreen.dart';
+import '../screens/inspire-v-newdesign/signatureScreen/binding/signaturesScreen_binding.dart';
+import '../screens/inspire-v-newdesign/signatureScreen/screen/signaturesScreen_screen.dart';
+import '../screens/inspire-v-newdesign/specialAmenitiesScreen/binding/amenitiesScreen_binding.dart';
+import '../screens/inspire-v-newdesign/specialAmenitiesScreen/screen/amenitiesScreen_screen.dart';
 import '../screens/inspire-v-newdesign/standard_screen/binding/inspireV_standardScreen_binding.dart';
 import '../screens/inspire-v-newdesign/standard_screen/screen/inpireV_standardScreen.dart';
 import '../screens/inspire-v-newdesign/unitDeficiencyDetailScreen/controller/unitDeficiencyDetailScreen_controller.dart';
@@ -368,5 +380,39 @@ class AppPages {
       }),
     ),
 
+    GetPage(
+      name: InspireVInsideUnitScreen.routes,
+      page: () => const InspireVInsideUnitScreen(),
+      binding: BindingsBuilder(() {
+        Get.lazyPut< InspireVInsideUnitScreenController>(() => InspireVInsideUnitScreenController());
+      }),
+    ),
+
+    GetPage(
+      name: InspireVOutsideUnitScreen.routes,
+      page: () => const InspireVOutsideUnitScreen(),
+      binding: BindingsBuilder(() {
+        Get.lazyPut< InspireVOutsideUnitScreenController>(() => InspireVOutsideUnitScreenController());
+      }),
+    ),
+    GetPage(
+      name: InspireVQuickPassUnitScreen.routes,
+      page: () => const InspireVQuickPassUnitScreen(),
+      binding: BindingsBuilder(() {
+        Get.lazyPut< InspireVQuickPassUnitScreenController>(() =>InspireVQuickPassUnitScreenController());
+      }),
+    ),
+    GetPage(
+        name: QPInspireVInspectionSummaryScreen.routes,
+        page: () => QPInspireVInspectionSummaryScreen(),
+        binding: InspireVInspectionSummaryBinding()),
+    GetPage(
+        name: InspireVAmenitiesScreen.routes,
+        page: () => InspireVAmenitiesScreen(),
+        binding: InspireVAmenitiesScreenBinding()),
+    GetPage(
+        name: InspireVSignatureScreen.routes,
+        page: () => InspireVSignatureScreen(),
+        binding: InspireVSignatureBinding()),
   ];
 }

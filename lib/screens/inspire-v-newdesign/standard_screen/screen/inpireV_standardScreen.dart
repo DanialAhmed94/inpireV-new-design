@@ -91,8 +91,8 @@ class InspireVStandardScreen extends StatelessWidget {
                               isMaxLineWrap: true, // allow wrapping
                             ),
                             Spacer(),
-                            CommonButton(title: "Inspection Summary",
-                                onTap: () {},
+                            CommonButton(title: "Special Amenities",
+                                onTap: () {controller.onSpecialAmenitiesTap();},
                                 color: AppColors.primerColor,
                                 textSize: 16,
                                 textFamily: "Roboto",textWeight: FontWeight.w500,).paddingOnly(

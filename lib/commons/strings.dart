@@ -26,7 +26,7 @@ class Strings {
   static const String completed = "Completed";
   static const String inComplete = "Incomplete";
   static const String scheduled = "Scheduled";
-  static const String annualInspection = "In Sample";
+  static const String annualInspection = "Annual Inspection";
   static const String inSample = "In Sample";
   static const String disconnectedElectric = "Disconnected Electric";
   static const String disconnectedGas = "Disconnected Gas";

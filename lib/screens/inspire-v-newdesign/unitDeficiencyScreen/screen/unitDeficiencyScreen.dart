@@ -125,7 +125,11 @@ class InspireVUnitDeficiencyScreen
                                             onPressed: () async {
                                               final result = await Get.toNamed(
                                                 InpireVUnitDeficiencyDetailScreen.routes,
-                                                arguments: {"deficiencyIndex": index},
+                                                arguments: {"deficiencyIndex": index,
+                                                  //test
+                                                "areaName": controller.areaName,
+                                                  'detail': controller.detail,
+                                                },
                                               );
                                               if (result != null && result["deficiencyIndex"] != null) {
                                                 controller.deficiencyCompleted[result["deficiencyIndex"] as int] = true;

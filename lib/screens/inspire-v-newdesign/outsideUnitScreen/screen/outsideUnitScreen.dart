@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:public_housing/commons/all.dart';
-import 'package:dropdown_button2/dropdown_button2.dart';
 import '../../unitDeficiencyScreen/screen/unitDeficiencyScreen.dart';
-import '../controller/unitScreen_controller.dart';
-import '../widgets/expandableCard_unitScreen.dart';
+import '../controller/outsideUnitScreen_controller.dart';
+import '../widget/expandableCard_outsideUnit.dart';
 
-class InspireVUnitScreen extends GetView<InspireVUnitScreenController> {
-  const InspireVUnitScreen({Key? key}) : super(key: key);
-  static const String routes = '/UnitScreenAreas';
+
+
+class InspireVOutsideUnitScreen extends GetView<InspireVOutsideUnitScreenController> {
+  const InspireVOutsideUnitScreen({Key? key}) : super(key: key);
+  static const String routes = '/outsideUnitScreenAreas';
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<InspireVUnitScreenController>(
-      init: InspireVUnitScreenController(),
+    return GetBuilder<InspireVOutsideUnitScreenController>(
+      init: InspireVOutsideUnitScreenController(),
       assignId: true,
       builder: (controller) {
         return BaseScreen(
@@ -117,22 +118,19 @@ class InspireVUnitScreen extends GetView<InspireVUnitScreenController> {
                                     Expanded(
                                       child: Column(
                                         crossAxisAlignment:
-                                            CrossAxisAlignment.stretch,
+                                        CrossAxisAlignment.stretch,
                                         children: List.generate(
                                             leftIndices.length, (columnIndex) {
                                           final actualIndex =
-                                              leftIndices[columnIndex];
+                                          leftIndices[columnIndex];
                                           final area =
-                                              controller.areas[actualIndex];
-                                          //test
-                                          final isCompleted = controller.completedDetails
-                                              .containsKey('${area.name}');
+                                          controller.areas[actualIndex];
 
                                           return Container(
                                             // Vertical spacing between cards
                                             margin:
-                                                EdgeInsets.only(bottom: 16.px),
-                                            child: UnitScreenExpandableRoomCard(
+                                            EdgeInsets.only(bottom: 16.px),
+                                            child: OutsideUnitScreenExpandableRoomCard(
                                               // 1. NEW: When a detail is tapped, navigate
                                               onItemTap: (detailSelected) {
                                                 Get.toNamed(
@@ -148,9 +146,6 @@ class InspireVUnitScreen extends GetView<InspireVUnitScreenController> {
                                               details: area.details,
                                               areaName: area.name,
                                               isExpanded: area.expanded.value,
-                                              //test
-                                                isCompleted:isCompleted,
-
                                               onToggle: () => controller
                                                   .toggleExpand(actualIndex),
                                               onAdd: () => controller
@@ -168,31 +163,22 @@ class InspireVUnitScreen extends GetView<InspireVUnitScreenController> {
                                     Expanded(
                                       child: Column(
                                         crossAxisAlignment:
-                                            CrossAxisAlignment.stretch,
+                                        CrossAxisAlignment.stretch,
                                         children: List.generate(
                                             rightIndices.length, (columnIndex) {
                                           final actualIndex =
-                                              rightIndices[columnIndex];
+                                          rightIndices[columnIndex];
                                           final area =
-                                              controller.areas[actualIndex];
-                                          //test
-                                          final isCompleted = controller.completedDetails
-                                              .containsKey('${area.name}');
+                                          controller.areas[actualIndex];
 
                                           return Container(
                                             margin:
-                                                EdgeInsets.only(bottom: 16.px),
-                                            child: UnitScreenExpandableRoomCard(
-                                                isCompleted:isCompleted,
+                                            EdgeInsets.only(bottom: 16.px),
+                                            child: OutsideUnitScreenExpandableRoomCard(
                                               // 1. NEW: When a detail is tapped, navigate
                                               onItemTap: (detailSelected) {
-
-                                                print("****${area.name} ${detailSelected}");
-
                                                 Get.toNamed(
-                                                  InspireVUnitDeficiencyScreen.routes,
-                                                  // or your route
-
+                                                  InspireVUnitDeficiencyScreen.routes, // or your route
                                                   arguments: {
                                                     'areaName': area.name,
 
@@ -208,8 +194,8 @@ class InspireVUnitScreen extends GetView<InspireVUnitScreenController> {
                                                   .toggleExpand(actualIndex),
                                               onAdd: () =>
                                                   controller.addAnotherArea(
-                                                actualIndex,
-                                              ),
+                                                    actualIndex,
+                                                  ),
                                             ),
                                           );
                                         }),
@@ -226,7 +212,7 @@ class InspireVUnitScreen extends GetView<InspireVUnitScreenController> {
                                       textColor: AppColors().border1,
                                       // Always gray text
                                       color:
-                                          AppColors().black.withOpacity(0.12),
+                                      AppColors().black.withOpacity(0.12),
                                       // Always “disabled” background
                                       radius: 35.px,
                                       textWeight: FontWeight.w600,
@@ -377,12 +363,12 @@ class InspireVUnitScreen extends GetView<InspireVUnitScreenController> {
                         onTap: selectedAreaName == null
                             ? null
                             : () {
-                                final area = controller.availableAreas
-                                    .firstWhere(
-                                        (a) => a.baseName == selectedAreaName);
-                                controller.addSelectedArea(area);
-                                Get.back();
-                              },
+                          final area = controller.availableAreas
+                              .firstWhere(
+                                  (a) => a.baseName == selectedAreaName);
+                          controller.addSelectedArea(area);
+                          Get.back();
+                        },
                         color: selectedAreaName == null
                             ? controller.appColors.appColor.withOpacity(0.4)
                             : controller.appColors.appColor)

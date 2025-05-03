@@ -25,12 +25,18 @@ class InpireVUnitDeficiencyDetailScontroller extends BaseController {
   final RxBool isListening = false.obs;
   bool visibleBtn = false;
   late int deficiencyIndex;
-
+  //test
+  late String areaName; // Properly initialized
+  late String detail;
   @override
   void onInit() {
     super.onInit();
     if (Get.arguments != null && Get.arguments["deficiencyIndex"] != null) {
       deficiencyIndex = Get.arguments["deficiencyIndex"];
+      //test
+      areaName = Get.arguments['areaName']; // Set here
+      detail = Get.arguments['detail'];
+
     } else {
       deficiencyIndex = 0;
     }

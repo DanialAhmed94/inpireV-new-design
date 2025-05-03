@@ -1,25 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:public_housing/commons/all.dart';
 
-class UnitScreenExpandableRoomCard extends StatelessWidget {
+class QuickPassUnitScreenExpandableRoomCard extends StatelessWidget {
   final String areaName;
   final bool isExpanded;
-  //test
-  final bool isCompleted;
   //final String areaType;
   final VoidCallback onToggle;
   final VoidCallback onAdd;  final Function(String detail)? onItemTap;
 
   final List<String> details; // ✅ Added details list
 
-  const UnitScreenExpandableRoomCard({
+  const QuickPassUnitScreenExpandableRoomCard({
     Key? key,
     required this.areaName,
     required this.isExpanded,
-    //test
-    required this.isCompleted,
-   // required this.areaType,
+    // required this.areaType,
     required this.onToggle,
     required this.onAdd,  this.onItemTap,
     required this.details, // ✅ Required details parameter
@@ -69,8 +63,6 @@ class UnitScreenExpandableRoomCard extends StatelessWidget {
                     ),
                   ),
                   // Add Button (+)
-                  if(isCompleted)
-                  SvgPicture.string(successIcon),
                   IconButton(
                     icon: Icon(Icons.add, size: 20, color: Colors.black),
                     onPressed: onAdd,

@@ -60,7 +60,6 @@ class GetStorageData {
     String allData = jsonEncode(value);
     box.write(key, allData);
   }
-
   /// <<< To read Object data --------- >>>
   readObject(String key) {
     final box = GetStorage();

@@ -1,25 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:public_housing/commons/all.dart';
 
-class UnitScreenExpandableRoomCard extends StatelessWidget {
+class InsideUnitScreenExpandableRoomCard extends StatelessWidget {
   final String areaName;
   final bool isExpanded;
-  //test
-  final bool isCompleted;
   //final String areaType;
   final VoidCallback onToggle;
   final VoidCallback onAdd;  final Function(String detail)? onItemTap;
 
   final List<String> details; // ✅ Added details list
 
-  const UnitScreenExpandableRoomCard({
+  const InsideUnitScreenExpandableRoomCard({
     Key? key,
     required this.areaName,
     required this.isExpanded,
-    //test
-    required this.isCompleted,
-   // required this.areaType,
+    // required this.areaType,
     required this.onToggle,
     required this.onAdd,  this.onItemTap,
     required this.details, // ✅ Required details parameter
@@ -49,7 +43,7 @@ class UnitScreenExpandableRoomCard extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "Unit",
+                          "Inside",
                           style: TextStyle(
                             fontSize: 12,
                             color: Colors.grey[600],
@@ -69,8 +63,6 @@ class UnitScreenExpandableRoomCard extends StatelessWidget {
                     ),
                   ),
                   // Add Button (+)
-                  if(isCompleted)
-                  SvgPicture.string(successIcon),
                   IconButton(
                     icon: Icon(Icons.add, size: 20, color: Colors.black),
                     onPressed: onAdd,
@@ -96,26 +88,34 @@ class UnitScreenExpandableRoomCard extends StatelessWidget {
             // Expanded Content (if expanded)
             if (isExpanded)
               Padding(
-                padding: const EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 16), // ✅ Reduced top padding
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: details.map((detail) => Padding(
-                    padding: const EdgeInsets.only(bottom: 4),
-                    child: GestureDetector(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                child: ListView.builder(
+                  shrinkWrap: true, // ✅ Important: let ListView size itself
+                  physics: NeverScrollableScrollPhysics(), // ✅ No internal scrolling needed
+                  itemCount: details.length,
+                  itemBuilder: (context, index) {
+                    final detail = details[index];
+                    return GestureDetector(
                       onTap: () => onItemTap?.call(detail),
-                      child: Text(
-                        detail,
-                        style: TextStyle(
-                          fontFamily: 'Roboto-Regular',
-                          fontSize: 16,
-                          color: Colors.black,
-                          decoration: TextDecoration.underline, // ✅ Underlined text
+                      child: Padding(
+                        padding: const EdgeInsets.only(bottom: 8),
+                        child: Text(
+                          detail,
+                          style: TextStyle(
+                            fontFamily: 'Roboto-Regular',
+                            fontSize: 16,
+                            color: Colors.black,
+                            decoration: TextDecoration.underline,
+                          ),
                         ),
                       ),
-                    ),
-                  )).toList(),
+                    );
+                  },
                 ),
               ),
+
+
+
           ],
         ),
       ),
