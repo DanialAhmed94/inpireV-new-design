@@ -42,6 +42,8 @@ import 'package:public_housing/screens/unit_inspection_summary_screen/binding/un
 import 'package:public_housing/screens/unit_inspection_summary_screen/screen/unit_inspection_summary_screen.dart';
 import 'package:public_housing/screens/unit_list_screen/binding/unit_list_binding.dart';
 import 'package:public_housing/screens/unit_list_screen/screen/unit_list_screen.dart';
+import '../screens/inspire-v-newdesign/addInspection/binding/addInspectionScreenBinding.dart';
+import '../screens/inspire-v-newdesign/addInspection/screen/addInspectionScreen.dart';
 import '../screens/inspire-v-newdesign/auth/binding/inpireV-auth_binding.dart';
 import '../screens/inspire-v-newdesign/auth/screen/inpireV-loginScreen.dart';
 import '../screens/inspire-v-newdesign/homeScreen/binding/inpireV-home_Binding.dart';
@@ -344,6 +346,11 @@ class AppPages {
       binding: InspireVHomeScreenBinding(),
     ),
     GetPage(
+      name: InspireVAddInspectionScreen.routes,
+      page: () => const InspireVAddInspectionScreen(),
+      binding: InspireVAddInspectionScreenBinding(),
+    ),
+    GetPage(
       name: InspireVSelectionScreen.routes,
       page: () => const InspireVSelectionScreen(),
       binding: InspireVSelectionBinding(),
@@ -355,14 +362,13 @@ class AppPages {
       binding: InspireVStandardScreenBinding(),
     ),
 
-
     GetPage(
       name: InspireVUnitScreen.routes,
       page: () => const InspireVUnitScreen(),
-      binding: BindingsBuilder(() {
-        Get.lazyPut< InspireVUnitScreenController>(() => InspireVUnitScreenController());
-      }),
+      binding: InspireVUnitScreenBinding()
+
     ),
+
 
     GetPage(
       name: InspireVUnitDeficiencyScreen.routes,

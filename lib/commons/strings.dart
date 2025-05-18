@@ -244,6 +244,7 @@ class Strings {
 
   static String publicHousing = "Public Housing";
   static String inspectManually = "Inspect Manually";
+  static String addInspection = "Add Inspection";
   static String selectTimeframe = "Select Timeframe";
   static String selectDates = "Select dates";
   static String today = "Today";

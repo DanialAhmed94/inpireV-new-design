@@ -7,12 +7,21 @@ class InspireVUnitScreenController extends BaseController {
   //test
   final RxMap<String, bool> completedDetails = <String, bool>{}.obs;
 
+  // void markDetailCompleted(String areaName) {
+  //   completedDetails[areaName] = true;
+  //   completedDetails.refresh(); // Trigger Obx reactivity
+  // }
+
   void markDetailCompleted(String areaName,) {
+    print('Marking detail completed for: $areaName'); // Add this
+
     completedDetails['$areaName'] = true;
     update();
   }
 
-
+// Inside InspireVUnitScreenController
+  bool get hasCompletedDetails =>
+      completedDetails.values.any((isCompleted) => isCompleted);
 
   /// #0. Dummy list of selectable area items
   final availableAreas = <AreaItem>[

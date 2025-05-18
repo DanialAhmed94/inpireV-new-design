@@ -158,32 +158,6 @@ class InspireVAmenitiesScreen extends StatelessWidget {
                             contentPadding: EdgeInsets.symmetric(horizontal: 16.px),
                           ),
                         )),
-                        Obx(() => Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            CommonButton(
-                              title: "Continue to Standards",
-                              textColor: controller.isDisabilityAccessible.value &&
-                                  controller.disabilityText.value.isNotEmpty
-                                  ? Colors.white
-                                  : AppColors().border1,
-                              color: controller.isDisabilityAccessible.value &&
-                                  controller.disabilityText.value.isNotEmpty
-                                  ? AppColors().appColor
-                                  : AppColors().black.withOpacity(0.12),
-                              radius: 35.px,
-                              textWeight: FontWeight.w600,
-                              textSize: 16.px,
-                              padding: EdgeInsets.symmetric(horizontal: 24.px, vertical: 12.px),
-                              onTap: controller.isDisabilityAccessible.value &&
-                                  controller.disabilityText.value.isNotEmpty
-                                  ? () {
-                                // Do something
-                              }
-                                  : null,
-                            ).paddingSymmetric(vertical: 48.px),
-                          ],
-                        )),
                         SizedBox(height: 24.px),
                       ],
                     ),

@@ -8,11 +8,15 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:public_housing/commons/all.dart';
+import 'package:screenshot/screenshot.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
+import 'package:syncfusion_flutter_signaturepad/signaturepad.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../deficiencies_inside_screen/Repository/deficiencies_inside_repository.dart';
 import '../../../deficiencies_inside_screen/controller/deficiencies_inside_controller.dart';
 import '../../../quic_fails_inspection_screen/screen/area_listing_screen.dart';
+import '../../addInspection/screen/addInspectionScreen.dart';
 import '../../standard_screen/screen/inpireV_standardScreen.dart';
 
 enum PropertyStatus { completed, scheduled }
@@ -85,6 +89,48 @@ class InspireVHomeScreenController extends BaseController {
       // … add more …
     ]);
   }
+// Signature Controllers
+  ScreenshotController tenantSignController = ScreenshotController();
+  ScreenshotController ownerSignController = ScreenshotController();
+  GlobalKey<SfSignaturePadState> tenantSignPadKey = GlobalKey();
+  GlobalKey<SfSignaturePadState> ownerSignPadKey = GlobalKey();
+  bool isTenantBlank = true;
+  bool isOwnerBlank = true;
+  bool tenantSign = false;
+  String tenantSignature = '';
+// Add these in your controller class
+  void resetSignatureState() {
+    isTenantBlank = true;
+    isOwnerBlank = true;
+    tenantSign = false;
+    tenantSignPadKey.currentState?.clear();
+    ownerSignPadKey.currentState?.clear();
+    clearTenantSignature();
+    clearOwnerSignature();
+    update();
+  }
+  void startTenantSignature() {
+    isTenantBlank = false;
+    update();
+  }
+
+  void clearTenantSignature() {
+    tenantSignPadKey.currentState?.clear();
+    isTenantBlank = true;
+    update();
+  }
+
+  void clearOwnerSignature() {
+    ownerSignPadKey.currentState?.clear();
+    isOwnerBlank = true;
+    update();
+  }
+
+
+  void startOwnerSignature() {
+    isOwnerBlank = false;
+    update();
+  }
 
   /// Called by the UI when the tile expands/collapses
   void toggleExpansion(int index, bool expanded) {
@@ -120,6 +166,12 @@ class InspireVHomeScreenController extends BaseController {
     // for now just log to console
     debugPrint('Start Inpection tapped → ');
     Get.toNamed(InspireVStandardScreen.routes);
+  }
+  void onAddInspectionTap() {
+    // for now just log to console
+    debugPrint('Add Inpection tapped → ');
+    Get.toNamed(
+        InspireVAddInspectionScreen.routes);
   }
 
   actionPopUpItemSelected(int value) {
@@ -210,6 +262,59 @@ class InspireVHomeScreenController extends BaseController {
       ),
     );
   }
+Future<void>openGoogleMap(String latitude, String longitude, BuildContext context)async{
+  String googleMapsUrl = 'https://www.google.com/maps/dir/?api=1&destination=${latitude},${longitude}'; // Replace with actual coordinates
+  final Uri uri = Uri.parse(googleMapsUrl);
+
+  try {
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            'Google Maps not installed. Please install Google Maps to use navigation',
+
+            style: TextStyle(color: Colors.white),
+          ),
+          behavior: SnackBarBehavior.floating,
+          backgroundColor: Colors.black87, // Light black
+          action: SnackBarAction(
+            label: 'OK',
+            textColor: Colors.orange,
+            onPressed: () {
+              ScaffoldMessenger.of(context).hideCurrentSnackBar();
+            },
+          ),
+        ),
+      );
+
+    }
+  } catch (e) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Error opening navigation: ${e.toString()}', style: TextStyle(color: Colors.white),),
+
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: Colors.black87, // Light black
+        action: SnackBarAction(
+          label: 'OK',
+          textColor: Colors.orange,
+          onPressed: () {
+            ScaffoldMessenger.of(context).hideCurrentSnackBar();
+          },
+        ),
+      ),
+    );
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Error opening navigation: ${e.toString()}'),
+        backgroundColor: Colors.red,
+      ),
+    );
+  }
+}
+
 
   Future<void> getFromGallery() async {
     final pickedFile = await ImagePicker()

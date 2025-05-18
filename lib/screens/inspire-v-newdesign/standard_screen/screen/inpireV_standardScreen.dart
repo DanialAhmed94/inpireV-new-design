@@ -1,6 +1,7 @@
 import 'package:flutter_svg/svg.dart';
 
 import '../../../../commons/all.dart';
+import '../../unitScreen/controller/unitScreen_controller.dart';
 import '../controller/inpireV_standardScreen_controller.dart';
 
 class InspireVStandardScreen extends StatelessWidget {
@@ -22,7 +23,7 @@ class InspireVStandardScreen extends StatelessWidget {
                 CommonAppBar(
                   color: controller.appColors.transparent,
                   radius: 0.px,
-                  onClickBack: () => Get.back(),
+                  onClickBack: () => controller.handleBackPressed(), // Updated
                 ),
 
                 // Scrollable Content
@@ -91,12 +92,41 @@ class InspireVStandardScreen extends StatelessWidget {
                               isMaxLineWrap: true, // allow wrapping
                             ),
                             Spacer(),
-                            CommonButton(title: "Special Amenities",
-                                onTap: () {controller.onSpecialAmenitiesTap();},
-                                color: AppColors.primerColor,
+                            Obx(() {
+                              final dummy = controller.dummyRx.value;
+
+                              // Check if the controller exists
+                              final isControllerAvailable = Get.isRegistered<InspireVUnitScreenController>();
+
+                              // If not available yet, disable the button
+                              if (!isControllerAvailable) {
+                                return CommonButton(
+                                  title: "Special Amenities",
+                                  onTap: null,
+                                  color: Colors.grey,
+                                  textSize: 16,
+                                  textFamily: "Roboto",
+                                  textWeight: FontWeight.w500,
+                                ).paddingOnly(left: 32.px, right: 32.px, bottom: 10.px);
+                              }
+
+                              // Access the controller safely
+                              final unitController = Get.find<InspireVUnitScreenController>();
+                              print("*******************u${unitController.completedDetails}");
+
+                               final isEnabled = unitController.hasCompletedDetails;
+                             // final isEnabled = unitController.completedDetails.values.any((v) => v);
+
+                              return CommonButton(
+                                title: "Special Amenities",
+                                onTap: isEnabled ? () => controller.onSpecialAmenitiesTap() : null,
+                                color: isEnabled ? AppColors.primerColor : Colors.grey,
                                 textSize: 16,
-                                textFamily: "Roboto",textWeight: FontWeight.w500,).paddingOnly(
-                                left: 32.px, right: 32.px, bottom: 10.px),
+                                textFamily: "Roboto",
+                                textWeight: FontWeight.w500,
+                              ).paddingOnly(left: 32.px, right: 32.px, bottom: 10.px);
+                            }),
+
 
                           ],
                         ).paddingOnly(left: 32.px, right: 32.px, bottom: 32.px),
