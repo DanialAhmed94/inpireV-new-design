@@ -57,7 +57,7 @@ class InspireVStandardScreenController extends BaseController {
             borderRadius: BorderRadius.circular(8.px),
           ),
           title: Text(
-            'Inspection in processes',
+            'Inspection in process',
             style: TextStyle(
               fontSize: 20.px,
               fontWeight: FontWeight.w600,

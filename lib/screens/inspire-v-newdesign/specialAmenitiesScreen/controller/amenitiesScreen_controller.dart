@@ -10,6 +10,32 @@ class InspireVAmenitiesScreenController extends BaseController {
   final TextEditingController disabilityController = TextEditingController();
   RxString disabilityText = ''.obs;
 
+  final List<String> inspectionTypes = [
+    'Unknown',
+    'Apartments',
+    'Condominium',
+    'Cooperative',
+    'Double',
+    'Duplex ',
+    'Flat',
+    'Highrise',
+    'House',
+    'Loft',
+    'Mobile Home',
+    'Mobile Home Park',
+    'Modular or Manufactured',
+    'Multi Family Flat ',
+    'Quaduplex',
+    'Single Room Occupancy',
+    'Shared Housing/Room to Rent',
+    'Studio/Efficiency',
+    'Townhouse',
+    'Triplex',
+    'Villa',
+  ];
+  String? selectedUnitType;
+  final unitSizeeController = TextEditingController();
+  final unitAgeController = TextEditingController();
 
   InspireVAmenitiesScreenController() {
     disabilityController.addListener(() {
@@ -19,42 +45,82 @@ class InspireVAmenitiesScreenController extends BaseController {
   @override
   void onClose() {
     disabilityController.dispose();
+
+    for (final section in sections) {
+      section.otherController.dispose();
+    }
+
     super.onClose();
   }
 
+
   final List<AmenitySection> sections = <AmenitySection>[
     AmenitySection(title: "Living Room", options: [
-      AmenityOption("High quality floors or wall coverings"),
-      AmenityOption("Working fireplace or stove"),
       AmenityOption("Balcony, patio, deck, porch"),
-      AmenityOption("Special windows or doors"),
       AmenityOption("Exceptional size relative to needs of family"),
+      AmenityOption("High quality floors or wall coverings"),
+      AmenityOption("Special windows or doors"),
+      AmenityOption("Working fireplace or stove"),
+
     ], isExpanded: true),
 
     AmenitySection(title: "Kitchen", options: [
-      AmenityOption("Modern cabinets"),
-      AmenityOption("Granite countertops"),
+      AmenityOption("Abundant counter-top space"),
+      AmenityOption("Dishwasher"),
+      AmenityOption("Double sink"),
+      AmenityOption("Double oven/self cleaning oven, microwave"),
+      AmenityOption("Eating counter/breakfast nook"),
+      AmenityOption("Exceptional size relative to needs of family"),
+      AmenityOption("Garbage disposal"),
+      AmenityOption("High quality cabinets"),
+      AmenityOption("Modern appliance(s)"),
+      AmenityOption("Separate freezer"),
     ]),
 
     AmenitySection(title: "Other rooms used for living", options: [
-      AmenityOption("Recreation room"),
-      AmenityOption("Home office"),
+      AmenityOption("Balcony, patio, deck, porch"),
+      AmenityOption("Exceptional size relative to needs of family"),
+      AmenityOption("High quality floors or wall coverings"),
+      AmenityOption("Special windows or doors"),
+      AmenityOption("Working fireplace or stove"),
+
     ]),
 
-    AmenitySection(title: "Bath", options: [
-      AmenityOption("Jacuzzi tub"),
-      AmenityOption("Walk-in shower"),
+    AmenitySection(title: "Bathroom", options: [
+      AmenityOption("Built-in heat lamp"),
+      AmenityOption("Double sink or special lavatory"),
+      AmenityOption("Exceptional size relative to needs of family"),
+      AmenityOption("Glass door on shower/tub"),
+      AmenityOption("Large mirrors"),
+      AmenityOption("Separate dressing room"),
+      AmenityOption("Special feature shower head"),
+
+
     ]),
 
     AmenitySection(title: "Overall Characteristics", options: [
-      AmenityOption("Energy efficient"),
-      AmenityOption("Recently renovated"),
+      AmenityOption("Central A/C"),
+      AmenityOption("Driveway"),
+      AmenityOption("Garage"),
+      AmenityOption("Good maintenance of building exterior"),
+      AmenityOption("Good upkeep of grounds (i.e., site cleanliness, landscaping)"),
+      AmenityOption("Large yard"),
+      AmenityOption("Miniblinds"),
+      AmenityOption("Other forms of weatherization (e.g., insulation, weather, stripping)"),
+      AmenityOption("Parking Facilities"),
+      AmenityOption("Pest Control"),
+      AmenityOption("Screen doors or windows"),
+      AmenityOption("Storm windows and doors"),
+      AmenityOption("Wall A/C"),
     ]),
 
     AmenitySection(title: "Disabled Accessibility", options: [
-      AmenityOption("Wheelchair ramp"),
-      AmenityOption("Wide doorways"),
+      AmenityOption("32¨ Doors"),
+      AmenityOption("Flat Entry"),
+      AmenityOption("Ramped Entry "),
     ]),
+
+
   ];
 
   void toggleOption(int sectionIndex, String label, bool value) {
@@ -76,18 +142,112 @@ class InspireVAmenitiesScreenController extends BaseController {
     // TODO: Add navigation or business logic here.
     Get.toNamed(QPInspireVInspectionSummaryScreen.routes);
   }
-}
 
+
+
+
+  // For Utilities/Amenities Section
+  final utilitiesOptions = <AmenityOption>[
+    AmenityOption("Cable Television"),
+    AmenityOption("Electric"),
+    AmenityOption("Gas"),
+    AmenityOption("High Speed Internet"),
+    AmenityOption("Sewer"),
+    AmenityOption("Trash Pick Up"),
+    AmenityOption("Water"),
+  ].obs;
+
+  final applianceOptions = <AmenityOption>[
+    AmenityOption("Ceiling Fan"),
+    AmenityOption("Dryer"),
+    AmenityOption("Microwave"),
+    AmenityOption("Refrigerator"),
+    AmenityOption("Washer"),
+    AmenityOption("Other Electric"),
+  ].obs;
+
+  final amenityOptions = <AmenityOption>[
+    AmenityOption("Co-Working Space"),
+    AmenityOption("Gardens"),
+    AmenityOption("Laundry"),
+    AmenityOption("Parking"),
+    AmenityOption("Parks"),
+    AmenityOption("Playgrounds"),
+  ].obs;
+
+  final neighborhoodOptions = <AmenityOption>[
+    AmenityOption("Community Centers"),
+    AmenityOption("Groceries Stores"),
+    AmenityOption("Healthcare"),
+    AmenityOption("Library"),
+    AmenityOption("Pharmacies"),
+    AmenityOption("Public Transport"),
+    AmenityOption("Schools"),
+    AmenityOption("Sport Fields"),
+    AmenityOption("Squares"),
+  ].obs;
+
+// For Condition/Maintenance Section
+  final constructionQuality = "Really Bad".obs;
+  final constructionQualityOptions = [
+    "Very good",
+    "Good",
+    "Regular",
+    "Bad",
+    "Really Bad"
+  ];
+
+  final maintenanceCondition = "Regular".obs;
+  final maintenanceConditionOptions = [
+    "Very good",
+    "Good",
+    "Regular",
+    "Bad",
+    "Really Bad"
+  ];
+  final systemOptions = <SystemOption>[
+    SystemOption(
+      label: "Heating System",
+      fuelOptions: ["Natural Gas", "Bottled Gas", "Oil", "Electric"],
+    ),
+    SystemOption(
+      label: "Stove",
+      fuelOptions: ["Natural Gas", "Bottled Gas", "Oil", "Electric"],
+    ),
+    SystemOption(
+      label: "Water Heating",
+      fuelOptions: ["Natural Gas", "Bottled Gas", "Oil", "Electric"],
+    ),
+  ].obs;
+}
+class SystemOption {
+  final String label;
+  final RxBool isChecked;
+  final RxString selectedFuel;
+  final List<String> fuelOptions;
+
+  SystemOption({
+    required this.label,
+    bool isChecked = false,
+    String selectedFuel = '',
+    required this.fuelOptions,
+  })  : isChecked = isChecked.obs,
+        selectedFuel = selectedFuel.obs;
+}
 class AmenitySection {
   final String title;
   final List<AmenityOption> options;
   bool isExpanded;
+  final TextEditingController otherController;
+  bool otherChecked;
 
   AmenitySection({
     required this.title,
     required this.options,
     this.isExpanded = false,
-  });
+    TextEditingController? otherController,
+    this.otherChecked = false,
+  }) : otherController = otherController ?? TextEditingController();
 }
 
 class AmenityOption {

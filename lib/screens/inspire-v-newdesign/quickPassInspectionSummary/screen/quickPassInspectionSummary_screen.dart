@@ -155,7 +155,7 @@ class QPInspireVInspectionSummaryScreen extends GetView<QPInspireVInspectionSumm
                                                       height: 10.px,
                                                       decoration: BoxDecoration(
                                                         shape: BoxShape.circle,
-                                                        color: controller.appColors.appColor,
+                                                        color: Color(0xFF005E0A),
                                                       ),
                                                     ),
                                                   )

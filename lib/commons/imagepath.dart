@@ -1,5 +1,5 @@
 class ImagePath {
-  static String base = "assets/images/";
+  static String               base = "assets/images/";
 
   static String commonBg = "${base}background.png";
   static String commonBgAr = "${base}commonBgAr.png";
@@ -89,6 +89,7 @@ class ImagePath {
   //inpire-v
 
   static String inspreVSigninBackground = "${base}inprire-v-auth-background.png";
+  static String inspreVWelcomeBackground = "${base}inprire-v-welcome-background.png";
   static String inspreVSigninLogo = "${base}inspreVSigninLogo.png";
   static String inspreVSigninGilsonLogo = "${base}inspire-v-gilsonlogo-white.png";
 }

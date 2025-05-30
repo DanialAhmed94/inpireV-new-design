@@ -259,6 +259,7 @@ class InspireVAddInspectionScreen extends StatelessWidget {
                                   children: [
                                     Expanded(
                                       child: TextFormField(
+                                        readOnly: true,
                                         controller:
                                             controller.inspectorNameController,
                                         style: TextStyle(
@@ -381,6 +382,7 @@ class InspireVAddInspectionScreen extends StatelessWidget {
                                 SizedBox(height: 16.px),
                                 TextFormField(
                                   controller: controller.unitAddressController,
+                                 // readOnly: true,
                                   style: TextStyle(
                                       color: Colors.black,
                                       fontFamily: 'Roboto',
@@ -393,6 +395,11 @@ class InspireVAddInspectionScreen extends StatelessWidget {
                                   ),
                                 ),
 
+                                SizedBox(height: 4.px),
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 16),
+                                  child: MyTextView("*required",textStyleNew: TextStyle(fontWeight: FontWeight.w400),),
+                                ),
                                 SizedBox(height: 16.px),
 
                                 Row(

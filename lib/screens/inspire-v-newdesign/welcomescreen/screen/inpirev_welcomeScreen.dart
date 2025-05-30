@@ -16,7 +16,7 @@ class InspireVSelectionScreen extends GetView<InspireVSelectionController> {
         children: [
           Positioned.fill(
             child: Image.asset(
-              ImagePath.inspreVSigninBackground,
+              ImagePath.inspreVWelcomeBackground,
               fit: BoxFit.cover,
             ),
           ),
@@ -35,7 +35,7 @@ class InspireVSelectionScreen extends GetView<InspireVSelectionController> {
                           ),
                           const SizedBox(height: 16),
 
-                          const SizedBox(height: 8),
+                          const SizedBox(height: 16),
                           Obx(() => Text(
                             'Welcome back, ${controller.userName.value}',
                             style: const TextStyle(

@@ -143,10 +143,9 @@ class InspireVAddInspectionScreenController extends BaseController {
     update();
   }
   bool validateForm() {
-    if (inspectorNameController.text.isEmpty ||
+    if (
         unitAddressController.text.isEmpty ||
-        inspectionDate == null ||
-        inspectionTime == null ||
+
         selectedInspectionType == null) {
       Get.snackbar(
         'Missing Information',

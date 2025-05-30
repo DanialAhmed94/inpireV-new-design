@@ -204,7 +204,7 @@ class InpireVUnitDeficiencyDetailScreen
                               Icon(Icons.delete, color: Colors.red),
                               SizedBox(width: 4.px),
                               TextButton(
-                                onPressed: () {},
+                                onPressed: () {showDeleteChangesDialog(context);},
                                 child: Text(
                                   Strings.deleteChanges,
                                   style: TextStyle(
@@ -565,6 +565,91 @@ class InpireVUnitDeficiencyDetailScreen
       },
     );
   }
+
+
+
+  void showDeleteChangesDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              maxWidth: 320, // 👈 Limit the max width here
+            ),
+            child: IntrinsicWidth(
+              child: Padding(
+                padding: const EdgeInsets.all(20),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Icon(Icons.warning_amber_rounded, color: Colors.orange, size: 30),
+                    const SizedBox(height: 16),
+                    const Text(
+                      "Delete changes?",
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 16),
+                    const Text.rich(
+                      TextSpan(
+                        children: [
+                          TextSpan(text: "You are about to "),
+                          TextSpan(
+                            text: "delete all changes",
+                            style: TextStyle(color: Colors.red, fontWeight: FontWeight.w500),
+                          ),
+                          TextSpan(text: " made in this section. Do you want to continue?"),
+                        ],
+                      ),
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: 14, color: Colors.black87),
+                    ),
+                    const SizedBox(height: 24),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        TextButton(
+                          onPressed: () => Navigator.pop(context),
+                          child: const Text(
+                            "Cancel",
+                            style: TextStyle(color: Color(0xff002d74), fontWeight: FontWeight.w500),
+                          ),
+                        ),
+                        ElevatedButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                            // Your delete logic
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.red,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30),
+                            ),
+                            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                          ),
+                          child: const Text(
+                            "Delete Changes",
+                            style: TextStyle(fontWeight: FontWeight.w500,color: Colors.white),
+                          ),
+                        ),
+                      ],
+                    )
+                  ],
+                ),
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
 }
 
 class _DeficiencyRadioCard extends StatefulWidget {
@@ -611,7 +696,8 @@ class _DeficiencyRadioCardState extends State<_DeficiencyRadioCard> {
                   selectedOption = val!;
                 });
               },
-              activeColor: Colors.pink,
+              activeColor: Color(0xFF005E0A),
+
             ),
           ],
         ),

@@ -369,8 +369,20 @@ class InspireVHomeScreen extends StatelessWidget {
                   child: ListView.builder(
                     padding:
                         EdgeInsets.symmetric(horizontal: 16.px, vertical: 8.px),
-                    itemCount: controller.inspections.length,
+                    itemCount: controller.inspections.length+ 1,
                     itemBuilder: (_, idx) {
+                      if (idx == controller.inspections.length) {
+                        // 👈 Add your message at the end
+                        return Center(
+                          child: Padding(
+                            padding: EdgeInsets.only(top: 16.px, bottom: 32.px),
+                            child: MyTextView("These are today's inspections. To see more, select a timeframe."
+                              ,maxLinesNew: 1,
+                              textStyleNew: TextStyle(overflow: TextOverflow.ellipsis,),
+                            ),
+                          ),
+                        );
+                      }
                       final item = controller.inspections[idx];
                       return Card(
                         color: Colors.white,
@@ -450,7 +462,9 @@ class InspireVHomeScreen extends StatelessWidget {
                                       style: TextStyle(
                                         fontSize: 12.px,
                                         fontWeight: FontWeight.w500,
-                                        color: Colors.green[800],
+                                        color: item.tagLabel == 'Re-Inspection'
+                                            ? Color(0xFFF032E4)
+                                            : Colors.green[800],
                                       ),
                                     ),
                                   ),
@@ -797,6 +811,7 @@ class InspireVHomeScreen extends StatelessWidget {
                   ),
                 ),
 // #### End expandable list ####
+
               ],
             ),
           ),

@@ -42,7 +42,7 @@ class InspireVSigningScreen extends GetView<InspireVSigningController> {
                           children: [
                             // top logo
                             Image.asset(ImagePath.inspreVSigninLogo),
-                            SizedBox(height: 16),
+                            SizedBox(height: 32),
 
                             // subtitle
                             Text(
