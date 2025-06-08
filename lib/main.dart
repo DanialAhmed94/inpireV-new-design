@@ -12,7 +12,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:public_housing/screens/auth/signing_screen/binding/signing_binding.dart';
 import 'package:public_housing/screens/auth/signing_screen/screen/signing_screen.dart';
-import 'package:public_housing/screens/inspire-v-newdesign/auth/binding/inpireV-auth_binding.dart';
+import 'package:public_housing/screens/inspire-v-newdesign/auth/screen/binding/inpireV-auth_binding.dart';
 import 'package:public_housing/screens/inspire-v-newdesign/auth/screen/inpireV-loginScreen.dart';
 import 'api_repository/loading.dart';
 import 'commons/all.dart';

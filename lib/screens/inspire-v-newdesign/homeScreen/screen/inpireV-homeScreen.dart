@@ -95,7 +95,7 @@ class InspireVHomeScreen extends StatelessWidget {
                                                 Flexible(
                                                   flex: 1,
                                                   child: MyTextView(
-                                                    "Matt Gilson",
+                                                    "${GetStorageData().readString(GetStorageData().clientName)}",
                                                     textStyleNew: MyTextStyle(
                                                       textColor: controller
                                                           .appColors.lightText,
@@ -242,7 +242,6 @@ class InspireVHomeScreen extends StatelessWidget {
                                 textFamily: fontFamilyRegular,
                                 onTap: () {
                                   controller.onAddInspectionTap();
-
                                 },
                                 iconColor: controller.appColors.white,
                                 icon: inspectIcon,
@@ -339,7 +338,6 @@ class InspireVHomeScreen extends StatelessWidget {
                   ],
                 ).paddingOnly(left: 32.px, right: 32.px, top: 38.px),
 // … right after your segmented buttons …
-
                 Padding(
                   padding:
                       EdgeInsets.symmetric(horizontal: 16.px, vertical: 38.px),
@@ -364,454 +362,474 @@ class InspireVHomeScreen extends StatelessWidget {
                   ),
                 ),
 
-// #### Begin expandable list ####
-                Expanded(
-                  child: ListView.builder(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: 16.px, vertical: 8.px),
-                    itemCount: controller.inspections.length+ 1,
-                    itemBuilder: (_, idx) {
-                      if (idx == controller.inspections.length) {
-                        // 👈 Add your message at the end
-                        return Center(
-                          child: Padding(
-                            padding: EdgeInsets.only(top: 16.px, bottom: 32.px),
-                            child: MyTextView("These are today's inspections. To see more, select a timeframe."
-                              ,maxLinesNew: 1,
-                              textStyleNew: TextStyle(overflow: TextOverflow.ellipsis,),
-                            ),
-                          ),
-                        );
-                      }
-                      final item = controller.inspections[idx];
-                      return Card(
-                        color: Colors.white,
-                        margin: EdgeInsets.only(bottom: 12.px),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8.px),
-                        ),
-                        child: ExpansionTile(
-                          key: ValueKey(idx),
-                          // keeps state per tile
-                          tilePadding: EdgeInsets.symmetric(
-                              horizontal: 16.px, vertical: 12.px),
-                          childrenPadding: EdgeInsets.symmetric(
-                              horizontal: 16.px, vertical: 12.px),
-                          initiallyExpanded: item.isExpanded,
-                          onExpansionChanged: (open) =>
-                              controller.toggleExpansion(idx, open),
-
-                          // ─── collapsed header ───────────────────────
-                          title: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              // Address + location
-                              GestureDetector(
-                                onTap:()async{
-                                  controller.openGoogleMap("36.778259","119.417931",context);
-                        },
-                                child: RichText(
-                                  text: TextSpan(
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 16.px,
-                                      fontWeight: FontWeight.w600,
-                                      decoration: TextDecoration
-                                          .underline, // ← underline here
+                controller.status == PropertyStatus.completed
+                    ? Expanded(
+                        child: _buildCompletedInspectionsList(controller))
+                    : Expanded(
+                        child: ListView.builder(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 16.px, vertical: 8.px),
+                          itemCount: controller.inspections.length + 1,
+                          itemBuilder: (_, idx) {
+                            if (idx == controller.inspections.length) {
+                              // 👈 Add your message at the end
+                              return Center(
+                                child: Padding(
+                                  padding: EdgeInsets.only(
+                                      top: 16.px, bottom: 32.px),
+                                  child: MyTextView(
+                                    "These are today's inspections. To see more, select a timeframe.",
+                                    maxLinesNew: 1,
+                                    textStyleNew: TextStyle(
+                                      overflow: TextOverflow.ellipsis,
                                     ),
-                                    children: [
-                                      TextSpan(text: item.address),
-                                      TextSpan(
-                                        text: ' – ${item.location}',
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.w400,
-                                          fontSize: 14.px,
-                                          color: Colors.grey[700],
-                                          decoration: TextDecoration
-                                              .underline, // ← and here to be safe
+                                  ),
+                                ),
+                              );
+                            }
+                            final item = controller.inspections[idx];
+                            return Card(
+                              color: Colors.white,
+                              margin: EdgeInsets.only(bottom: 12.px),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8.px),
+                              ),
+                              child: ExpansionTile(
+                                key: ValueKey(idx),
+                                // keeps state per tile
+                                tilePadding: EdgeInsets.symmetric(
+                                    horizontal: 16.px, vertical: 12.px),
+                                childrenPadding: EdgeInsets.symmetric(
+                                    horizontal: 16.px, vertical: 12.px),
+                                initiallyExpanded: item.isExpanded,
+                                onExpansionChanged: (open) =>
+                                    controller.toggleExpansion(idx, open),
+
+                                // ─── collapsed header ───────────────────────
+                                title: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    // Address + location
+                                    GestureDetector(
+                                      onTap: () async {
+                                        controller.openGoogleMap(
+                                            "36.778259", "119.417931", context);
+                                      },
+                                      child: RichText(
+                                        text: TextSpan(
+                                          style: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 16.px,
+                                            fontWeight: FontWeight.w600,
+                                            decoration: TextDecoration
+                                                .underline, // ← underline here
+                                          ),
+                                          children: [
+                                            TextSpan(text: item.address),
+                                            TextSpan(
+                                              text: ' – ${item.location}',
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.w400,
+                                                fontSize: 14.px,
+                                                color: Colors.grey[700],
+                                                decoration: TextDecoration
+                                                    .underline, // ← and here to be safe
+                                              ),
+                                            ),
+                                          ],
                                         ),
+                                      ),
+                                    ),
+
+                                    const SizedBox(height: 8),
+
+                                    // tenant + tag
+                                    Row(
+                                      children: [
+                                        Text(
+                                          item.tenantName,
+                                          style: TextStyle(
+                                            fontSize: 14.px,
+                                            fontWeight: FontWeight.w400,
+                                          ),
+                                        ),
+                                        const SizedBox(width: 8),
+                                        Container(
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 8.px, vertical: 4.px),
+                                          decoration: BoxDecoration(
+                                            color: Colors.green[50],
+                                            borderRadius:
+                                                BorderRadius.circular(12.px),
+                                          ),
+                                          child: Text(
+                                            item.tagLabel,
+                                            style: TextStyle(
+                                              fontSize: 12.px,
+                                              fontWeight: FontWeight.w500,
+                                              color: item.tagLabel ==
+                                                      'Re-Inspection'
+                                                  ? Color(0xFFF032E4)
+                                                  : Colors.green[800],
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+
+                                    const SizedBox(height: 12),
+
+                                    // date + time
+                                    Row(
+                                      children: [
+                                        Icon(
+                                          Icons.calendar_today,
+                                          size: 16.px,
+                                          color: AppColors.primerColor,
+                                        ),
+                                        const SizedBox(width: 4),
+                                        Text(
+                                          DateFormat('MM/dd/yyyy')
+                                              .format(item.date),
+                                          style: TextStyle(fontSize: 14.px),
+                                        ),
+                                        const SizedBox(width: 16),
+                                        SvgPicture.string(
+                                          clockIcon,
+                                          height: 16.px,
+                                          width: 16.px,
+                                        ),
+                                        const SizedBox(width: 4),
+                                        Text(
+                                          item.timeRange,
+                                          style: TextStyle(fontSize: 14.px),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+
+                                // ─── expanded body ───────────────────────────
+                                children: [
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      // Tenant row
+                                      Text('Tenant Name • Tenant ID',
+                                          style: TextStyle(
+                                            fontSize: 12.px,
+                                            color: Colors.black,
+                                          )),
+                                      const SizedBox(height: 4),
+                                      Row(
+                                        children: [
+                                          Text(
+                                            item.tenantName,
+                                            style: TextStyle(
+                                              fontSize: 14.px,
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                          ),
+                                          const SizedBox(width: 16),
+                                          Icon(Icons.phone,
+                                              size: 16.px, color: Colors.green),
+                                          const SizedBox(width: 4),
+                                          GestureDetector(
+                                            onTap: () {
+                                              /* dial number */
+                                            },
+                                            child: Text(
+                                              item.tenantPhone,
+                                              style: TextStyle(
+                                                fontSize: 14.px,
+                                                color: Colors.green,
+                                                decoration:
+                                                    TextDecoration.underline,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+
+                                      SizedBox(height: 12.px),
+
+                                      // Landlord row
+                                      Text('Landlord Name • Tenant ID',
+                                          style: TextStyle(
+                                            fontSize: 12.px,
+                                            color: Colors.black,
+                                          )),
+                                      const SizedBox(height: 4),
+                                      Row(
+                                        children: [
+                                          Text(
+                                            item.landlordName,
+                                            style: TextStyle(
+                                              fontSize: 14.px,
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                          ),
+                                          const SizedBox(width: 16),
+                                          Icon(Icons.phone,
+                                              size: 16.px, color: Colors.green),
+                                          const SizedBox(width: 4),
+                                          GestureDetector(
+                                            onTap: () {
+                                              /* dial number */
+                                            },
+                                            child: Text(
+                                              item.landlordPhone,
+                                              style: TextStyle(
+                                                fontSize: 14.px,
+                                                color: Colors.green,
+                                                decoration:
+                                                    TextDecoration.underline,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+
+                                      const SizedBox(height: 16),
+
+                                      Text(
+                                        'Comments',
+                                        style: TextStyle(
+                                          fontSize: 14.px,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 4),
+                                      TextField(
+                                        readOnly: true,
+                                        controller: TextEditingController(
+                                            text: item.comments.isEmpty
+                                                ? ''
+                                                : item.comments),
+                                        decoration: InputDecoration(
+                                          hintText: item.comments.isEmpty
+                                              ? 'Add a comment…'
+                                              : null,
+                                          prefixIcon: Icon(Icons.comment,
+                                              size: 16.px, color: Colors.grey),
+                                          border: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(24.px),
+                                            borderSide: const BorderSide(
+                                                color: Colors.black),
+                                          ),
+                                          fillColor: Colors.white,
+                                          filled: true,
+                                          isDense: true,
+                                          contentPadding: EdgeInsets.symmetric(
+                                              vertical: 12.px),
+                                        ),
+                                      ),
+
+                                      const SizedBox(height: 32),
+
+                                      // Inspection Notes input
+                                      Text('Inspection Notes',
+                                          style: TextStyle(
+                                            fontSize: 14.px,
+                                            fontWeight: FontWeight.bold,
+                                          )),
+                                      const SizedBox(height: 4),
+                                      TextField(
+                                        decoration: InputDecoration(
+                                          hintText: 'Add Notes',
+                                          prefixIcon: const Icon(Icons.comment),
+                                          suffixIcon: const Icon(Icons.mic),
+                                          border: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(24.px),
+                                            borderSide: const BorderSide(
+                                                color: Colors.black),
+                                          ),
+                                          fillColor: Colors.white,
+                                          filled: true,
+                                        ),
+                                        onChanged: (val) {
+                                          item.comments = val;
+                                        },
+                                      ),
+
+                                      const SizedBox(height: 16),
+
+                                      // Bedrooms control
+                                      // … inside your ExpansionTile’s children Column, instead of two separate rows …
+
+                                      // ─── Bedrooms & Bathrooms side by side ─────────────────────
+                                      Row(
+                                        children: [
+                                          // Bedrooms block
+                                          Row(
+                                            children: [
+                                              Icon(Icons.bed,
+                                                  size: 20.px,
+                                                  color: AppColors.primerColor),
+                                              SizedBox(width: 4.px),
+                                              Text(
+                                                'Bedrooms',
+                                                style: TextStyle(
+                                                  color: AppColors().appColor,
+                                                  fontSize: 14.px,
+                                                  fontWeight: FontWeight.w500,
+                                                ),
+                                              ),
+                                              IconButton(
+                                                padding: EdgeInsets.zero,
+                                                constraints: BoxConstraints(),
+                                                icon: Icon(
+                                                  Icons.remove,
+                                                  size: 20.px,
+                                                  color: AppColors().appColor,
+                                                ),
+                                                onPressed: () => controller
+                                                    .decrementBedrooms(idx),
+                                              ),
+                                              SizedBox(width: 8.px),
+                                              Text(
+                                                '${item.bedrooms}',
+                                                style: TextStyle(
+                                                  fontSize: 14.px,
+                                                  color: AppColors().appColor,
+                                                ),
+                                              ),
+                                              SizedBox(width: 8.px),
+                                              IconButton(
+                                                padding: EdgeInsets.zero,
+                                                constraints: BoxConstraints(),
+                                                icon: Icon(
+                                                  Icons.add,
+                                                  size: 20.px,
+                                                  color: AppColors().appColor,
+                                                ),
+                                                onPressed: () => controller
+                                                    .incrementBedrooms(idx),
+                                              ),
+                                            ],
+                                          ),
+
+                                          // Vertical divider
+                                          Container(
+                                            width: 1.px,
+                                            height: 32.px,
+                                            color: controller.appColors.divider,
+                                            // or Colors.grey
+                                            margin: EdgeInsets.symmetric(
+                                                horizontal: 16.px),
+                                          ),
+
+                                          // Bathrooms block
+                                          Row(
+                                            children: [
+                                              SvgPicture.string(
+                                                bathroomIcon,
+                                                height: 20.px,
+                                                width: 20.px,
+                                              ),
+                                              SizedBox(width: 4.px),
+                                              Text(
+                                                'Bathrooms',
+                                                style: TextStyle(
+                                                  color: AppColors().appColor,
+                                                  fontSize: 14.px,
+                                                  fontWeight: FontWeight.w500,
+                                                ),
+                                              ),
+                                              SizedBox(width: 8.px),
+                                              IconButton(
+                                                padding: EdgeInsets.zero,
+                                                constraints: BoxConstraints(),
+                                                icon: Icon(
+                                                  Icons.remove,
+                                                  size: 20.px,
+                                                  color: AppColors().appColor,
+                                                ),
+                                                onPressed: () => controller
+                                                    .decrementBathrooms(idx),
+                                              ),
+                                              SizedBox(width: 8.px),
+                                              Text(
+                                                '${item.bathrooms}',
+                                                style: TextStyle(
+                                                  fontSize: 14.px,
+                                                  color: AppColors().appColor,
+                                                ),
+                                              ),
+                                              SizedBox(width: 8.px),
+                                              IconButton(
+                                                padding: EdgeInsets.zero,
+                                                constraints: BoxConstraints(),
+                                                icon: Icon(
+                                                  Icons.add,
+                                                  size: 20.px,
+                                                  color: AppColors().appColor,
+                                                ),
+                                                onPressed: () => controller
+                                                    .incrementBathrooms(idx),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+
+                                      const SizedBox(height: 16),
+
+                                      // Action buttons
+                                      Row(
+                                        children: [
+                                          OutlinedButton(
+                                            onPressed: () => _showNoShowDialog(
+                                                Get.context!, controller),
+                                            child: Text(
+                                              'No Show',
+                                              style: TextStyle(
+                                                color: AppColors().appColor,
+                                              ),
+                                            ),
+                                          ),
+                                          const SizedBox(width: 18),
+                                          OutlinedButton(
+                                            onPressed: () => _quickPassDialog(
+                                                Get.context!, controller),
+                                            child: Text(
+                                              'Quick Pass',
+                                              style: TextStyle(
+                                                color: AppColors().appColor,
+                                              ),
+                                            ),
+                                          ),
+                                          const Spacer(),
+                                          CommonButton(
+                                            title: "Start Inspection",
+                                            onTap: () {
+                                              controller.onStartInpectionTap(
+                                                  item.address,
+                                                  item.location,
+                                                  item.date,
+                                                  item.timeRange,
+                                                  item.tagLabel,
+                                                  item.tenantName);
+                                            },
+                                            color: AppColors().appColor,
+                                          ),
+                                        ],
                                       ),
                                     ],
-                                  ),
-                                ),
-                              ),
-
-                              const SizedBox(height: 8),
-
-                              // tenant + tag
-                              Row(
-                                children: [
-                                  Text(
-                                    item.tenantName,
-                                    style: TextStyle(
-                                      fontSize: 14.px,
-                                      fontWeight: FontWeight.w400,
-                                    ),
-                                  ),
-                                  const SizedBox(width: 8),
-                                  Container(
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: 8.px, vertical: 4.px),
-                                    decoration: BoxDecoration(
-                                      color: Colors.green[50],
-                                      borderRadius:
-                                          BorderRadius.circular(12.px),
-                                    ),
-                                    child: Text(
-                                      item.tagLabel,
-                                      style: TextStyle(
-                                        fontSize: 12.px,
-                                        fontWeight: FontWeight.w500,
-                                        color: item.tagLabel == 'Re-Inspection'
-                                            ? Color(0xFFF032E4)
-                                            : Colors.green[800],
-                                      ),
-                                    ),
-                                  ),
+                                  )
                                 ],
                               ),
-
-                              const SizedBox(height: 12),
-
-                              // date + time
-                              Row(
-                                children: [
-                                  Icon(
-                                    Icons.calendar_today,
-                                    size: 16.px,
-                                    color: AppColors.primerColor,
-                                  ),
-                                  const SizedBox(width: 4),
-                                  Text(
-                                    DateFormat('MM/dd/yyyy').format(item.date),
-                                    style: TextStyle(fontSize: 14.px),
-                                  ),
-                                  const SizedBox(width: 16),
-                                  SvgPicture.string(
-                                    clockIcon,
-                                    height: 16.px,
-                                    width: 16.px,
-                                  ),
-                                  const SizedBox(width: 4),
-                                  Text(
-                                    item.timeRange,
-                                    style: TextStyle(fontSize: 14.px),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-
-                          // ─── expanded body ───────────────────────────
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                // Tenant row
-                                Text('Tenant Name • Tenant ID',
-                                    style: TextStyle(
-                                      fontSize: 12.px,
-                                      color: Colors.black,
-                                    )),
-                                const SizedBox(height: 4),
-                                Row(
-                                  children: [
-                                    Text(
-                                      item.tenantName,
-                                      style: TextStyle(
-                                        fontSize: 14.px,
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                    ),
-                                    const SizedBox(width: 16),
-                                    Icon(Icons.phone,
-                                        size: 16.px, color: Colors.green),
-                                    const SizedBox(width: 4),
-                                    GestureDetector(
-                                      onTap: () {
-                                        /* dial number */
-                                      },
-                                      child: Text(
-                                        item.tenantPhone,
-                                        style: TextStyle(
-                                          fontSize: 14.px,
-                                          color: Colors.green,
-                                          decoration: TextDecoration.underline,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-
-                                SizedBox(height: 12.px),
-
-                                // Landlord row
-                                Text('Landlord Name • Tenant ID',
-                                    style: TextStyle(
-                                      fontSize: 12.px,
-                                      color: Colors.black,
-                                    )),
-                                const SizedBox(height: 4),
-                                Row(
-                                  children: [
-                                    Text(
-                                      item.landlordName,
-                                      style: TextStyle(
-                                        fontSize: 14.px,
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                    ),
-                                    const SizedBox(width: 16),
-                                    Icon(Icons.phone,
-                                        size: 16.px, color: Colors.green),
-                                    const SizedBox(width: 4),
-                                    GestureDetector(
-                                      onTap: () {
-                                        /* dial number */
-                                      },
-                                      child: Text(
-                                        item.landlordPhone,
-                                        style: TextStyle(
-                                          fontSize: 14.px,
-                                          color: Colors.green,
-                                          decoration: TextDecoration.underline,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-
-                                const SizedBox(height: 16),
-
-                                Text(
-                                  'Comments',
-                                  style: TextStyle(
-                                    fontSize: 14.px,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                const SizedBox(height: 4),
-                                TextField(
-                                  readOnly: true,
-                                  controller: TextEditingController(
-                                      text: item.comments.isEmpty
-                                          ? ''
-                                          : item.comments),
-                                  decoration: InputDecoration(
-                                    hintText: item.comments.isEmpty
-                                        ? 'Add a comment…'
-                                        : null,
-                                    prefixIcon: Icon(Icons.comment,
-                                        size: 16.px, color: Colors.grey),
-                                    border: OutlineInputBorder(
-                                      borderRadius:
-                                          BorderRadius.circular(24.px),
-                                      borderSide:
-                                          const BorderSide(color: Colors.black),
-                                    ),
-                                    fillColor: Colors.white,
-                                    filled: true,
-                                    isDense: true,
-                                    contentPadding:
-                                        EdgeInsets.symmetric(vertical: 12.px),
-                                  ),
-                                ),
-
-                                const SizedBox(height: 32),
-
-                                // Inspection Notes input
-                                Text('Inspection Notes',
-                                    style: TextStyle(
-                                      fontSize: 14.px,
-                                      fontWeight: FontWeight.bold,
-                                    )),
-                                const SizedBox(height: 4),
-                                TextField(
-                                  decoration: InputDecoration(
-                                    hintText: 'Add Notes',
-                                    prefixIcon: const Icon(Icons.comment),
-                                    suffixIcon: const Icon(Icons.mic),
-                                    border: OutlineInputBorder(
-                                      borderRadius:
-                                          BorderRadius.circular(24.px),
-                                      borderSide:
-                                          const BorderSide(color: Colors.black),
-                                    ),
-                                    fillColor: Colors.white,
-                                    filled: true,
-                                  ),
-                                  onChanged: (val) {
-                                    item.comments = val;
-                                  },
-                                ),
-
-                                const SizedBox(height: 16),
-
-                                // Bedrooms control
-                                // … inside your ExpansionTile’s children Column, instead of two separate rows …
-
-// ─── Bedrooms & Bathrooms side by side ─────────────────────
-                                Row(
-                                  children: [
-                                    // Bedrooms block
-                                    Row(
-                                      children: [
-                                        Icon(Icons.bed,
-                                            size: 20.px,
-                                            color: AppColors.primerColor),
-                                        SizedBox(width: 4.px),
-                                        Text(
-                                          'Bedrooms',
-                                          style: TextStyle(
-                                            color: AppColors().appColor,
-                                            fontSize: 14.px,
-                                            fontWeight: FontWeight.w500,
-                                          ),
-                                        ),
-                                        IconButton(
-                                          padding: EdgeInsets.zero,
-                                          constraints: BoxConstraints(),
-                                          icon: Icon(
-                                            Icons.remove,
-                                            size: 20.px,
-                                            color: AppColors().appColor,
-                                          ),
-                                          onPressed: () =>
-                                              controller.decrementBedrooms(idx),
-                                        ),
-                                        SizedBox(width: 8.px),
-                                        Text(
-                                          '${item.bedrooms}',
-                                          style: TextStyle(
-                                            fontSize: 14.px,
-                                            color: AppColors().appColor,
-                                          ),
-                                        ),
-                                        SizedBox(width: 8.px),
-                                        IconButton(
-                                          padding: EdgeInsets.zero,
-                                          constraints: BoxConstraints(),
-                                          icon: Icon(
-                                            Icons.add,
-                                            size: 20.px,
-                                            color: AppColors().appColor,
-                                          ),
-                                          onPressed: () =>
-                                              controller.incrementBedrooms(idx),
-                                        ),
-                                      ],
-                                    ),
-
-                                    // Vertical divider
-                                    Container(
-                                      width: 1.px,
-                                      height: 32.px,
-                                      color: controller.appColors.divider,
-                                      // or Colors.grey
-                                      margin: EdgeInsets.symmetric(
-                                          horizontal: 16.px),
-                                    ),
-
-                                    // Bathrooms block
-                                    Row(
-                                      children: [
-                                        SvgPicture.string(
-                                          bathroomIcon,
-                                          height: 20.px,
-                                          width: 20.px,
-                                        ),
-                                        SizedBox(width: 4.px),
-                                        Text(
-                                          'Bathrooms',
-                                          style: TextStyle(
-                                            color: AppColors().appColor,
-                                            fontSize: 14.px,
-                                            fontWeight: FontWeight.w500,
-                                          ),
-                                        ),
-                                        SizedBox(width: 8.px),
-                                        IconButton(
-                                          padding: EdgeInsets.zero,
-                                          constraints: BoxConstraints(),
-                                          icon: Icon(
-                                            Icons.remove,
-                                            size: 20.px,
-                                            color: AppColors().appColor,
-                                          ),
-                                          onPressed: () => controller
-                                              .decrementBathrooms(idx),
-                                        ),
-                                        SizedBox(width: 8.px),
-                                        Text(
-                                          '${item.bathrooms}',
-                                          style: TextStyle(
-                                            fontSize: 14.px,
-                                            color: AppColors().appColor,
-                                          ),
-                                        ),
-                                        SizedBox(width: 8.px),
-                                        IconButton(
-                                          padding: EdgeInsets.zero,
-                                          constraints: BoxConstraints(),
-                                          icon: Icon(
-                                            Icons.add,
-                                            size: 20.px,
-                                            color: AppColors().appColor,
-                                          ),
-                                          onPressed: () => controller
-                                              .incrementBathrooms(idx),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-
-                                const SizedBox(height: 16),
-
-                                // Action buttons
-                                Row(
-                                  children: [
-                                    OutlinedButton(
-                                      onPressed: () => _showNoShowDialog(
-                                          Get.context!, controller),
-                                      child: Text(
-                                        'No Show',
-                                        style: TextStyle(
-                                          color: AppColors().appColor,
-                                        ),
-                                      ),
-                                    ),
-                                    const SizedBox(width: 18),
-                                    OutlinedButton(
-                                      onPressed: () => _quickPassDialog(
-                                          Get.context!, controller),
-                                      child: Text(
-                                        'Quick Pass',
-                                        style: TextStyle(
-                                          color: AppColors().appColor,
-                                        ),
-                                      ),
-                                    ),
-                                    const Spacer(),
-                                    CommonButton(
-                                      title: "Start Inspection",
-                                      onTap: () {
-                                        controller.onStartInpectionTap();
-                                      },
-                                      color: AppColors().appColor,
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            )
-                          ],
+                            );
+                          },
                         ),
-                      );
-                    },
-                  ),
-                ),
-// #### End expandable list ####
+                      ),
 
+// #### Begin expandable list ####
+
+// #### End expandable list ####
               ],
             ),
           ),
@@ -1228,7 +1246,8 @@ class InspireVHomeScreen extends StatelessWidget {
                   SizedBox(width: 32.px), // Space between the two buttons
                   GetBuilder<InspireVHomeScreenController>(
                     builder: (controller) {
-                      final bool isButtonEnabled = controller.imageList.isNotEmpty;
+                      final bool isButtonEnabled =
+                          controller.imageList.isNotEmpty;
 
                       return CommonButton(
                         title: "Complete Inspection",
@@ -1237,21 +1256,19 @@ class InspireVHomeScreen extends StatelessWidget {
                         textSize: 16,
                         onTap: isButtonEnabled
                             ? () {
-                          Navigator.of(ctx).pop();
-                        }
+                                Navigator.of(ctx).pop();
+                              }
                             : null,
                         color: isButtonEnabled
                             ? AppColors.primerColor
                             : AppColors().border1,
-                        textColor: isButtonEnabled
-                            ? Colors.white
-                            : Colors.black,
+                        textColor:
+                            isButtonEnabled ? Colors.white : Colors.black,
                       );
                     },
                   ),
                 ],
               )
-
             ],
           ),
         ),
@@ -1266,7 +1283,8 @@ class InspireVHomeScreen extends StatelessWidget {
       barrierDismissible: false,
       builder: (_) => Dialog(
         backgroundColor: Colors.white,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.px)),
+        shape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.px)),
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 24.px, vertical: 20.px),
           child: GetBuilder<InspireVHomeScreenController>(
@@ -1283,11 +1301,17 @@ class InspireVHomeScreen extends StatelessWidget {
                     // ── Title ──────────────────────────────
                     Text(
                       'Pass Unit Inspection',
-                      style: TextStyle(fontSize: 32.px, fontWeight: FontWeight.w600, fontFamily: "Roboto"),
+                      style: TextStyle(
+                          fontSize: 32.px,
+                          fontWeight: FontWeight.w600,
+                          fontFamily: "Roboto"),
                     ),
                     Text(
                       'You will quick pass the Inspection',
-                      style: TextStyle(fontSize: 16.px, fontWeight: FontWeight.w400, fontFamily: "Roboto"),
+                      style: TextStyle(
+                          fontSize: 16.px,
+                          fontWeight: FontWeight.w400,
+                          fontFamily: "Roboto"),
                     ),
                     SizedBox(height: 20.px),
 
@@ -1303,141 +1327,165 @@ class InspireVHomeScreen extends StatelessWidget {
                         padding: EdgeInsets.symmetric(horizontal: 16.px),
                         child: controller.imageList.isEmpty
                             ? GestureDetector(
-                          onTap: controller.imagePicker,
-                          child: Container(
-                            height: 76.px,
-                            decoration: BoxDecoration(
-                              color: Colors.transparent,
-                              borderRadius: BorderRadius.circular(8.px),
-                            ),
-                            child: Row(
-                              children: [
-                                Container(
-                                  width: 60.px,
-                                  alignment: Alignment.center,
-                                  child: SvgPicture.string(
-                                    addCameraIcon,
-                                    width: 32.px,
-                                    height: 32.px,
-                                    color: AppColors.primerColor,
+                                onTap: controller.imagePicker,
+                                child: Container(
+                                  height: 76.px,
+                                  decoration: BoxDecoration(
+                                    color: Colors.transparent,
+                                    borderRadius: BorderRadius.circular(8.px),
                                   ),
-                                ),
-                                VerticalDivider(color: Colors.grey.shade300, thickness: 1),
-                                Expanded(
-                                  child: Padding(
-                                    padding: EdgeInsets.symmetric(vertical: 8.px),
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          'Picture required',
-                                          style: TextStyle(
-                                            fontSize: 16.px,
-                                            fontWeight: FontWeight.w600,
-                                            color: AppColors.primerColor,
+                                  child: Row(
+                                    children: [
+                                      Container(
+                                        width: 60.px,
+                                        alignment: Alignment.center,
+                                        child: SvgPicture.string(
+                                          addCameraIcon,
+                                          width: 32.px,
+                                          height: 32.px,
+                                          color: AppColors.primerColor,
+                                        ),
+                                      ),
+                                      VerticalDivider(
+                                          color: Colors.grey.shade300,
+                                          thickness: 1),
+                                      Expanded(
+                                        child: Padding(
+                                          padding: EdgeInsets.symmetric(
+                                              vertical: 8.px),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Text(
+                                                'Picture required',
+                                                style: TextStyle(
+                                                  fontSize: 16.px,
+                                                  fontWeight: FontWeight.w600,
+                                                  color: AppColors.primerColor,
+                                                ),
+                                              ),
+                                              Text('before continue',
+                                                  style: TextStyle(
+                                                      fontSize: 14.px)),
+                                            ],
                                           ),
                                         ),
-                                        Text('before continue', style: TextStyle(fontSize: 14.px)),
-                                      ],
-                                    ),
+                                      ),
+                                    ],
                                   ),
                                 ),
-                              ],
-                            ),
-                          ),
-                        )
+                              )
                             : Row(
-                          children: [
-                            Expanded(
-                              child: SingleChildScrollView(
-                                scrollDirection: Axis.horizontal,
-                                child: Row(
-                                  children: [
-                                    GestureDetector(
-                                      onTap: controller.imagePicker,
-                                      child: Container(
-                                        height: 76.px,
-                                        padding: EdgeInsets.symmetric(horizontal: 8.px),
-                                        decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          borderRadius: BorderRadius.circular(8.px),
-                                        ),
-                                        child: Row(
-                                          children: [
-                                            SvgPicture.string(
-                                              addCameraIcon,
-                                              width: 32.px,
-                                              height: 32.px,
-                                              color: AppColors.primerColor,
+                                children: [
+                                  Expanded(
+                                    child: SingleChildScrollView(
+                                      scrollDirection: Axis.horizontal,
+                                      child: Row(
+                                        children: [
+                                          GestureDetector(
+                                            onTap: controller.imagePicker,
+                                            child: Container(
+                                              height: 76.px,
+                                              padding: EdgeInsets.symmetric(
+                                                  horizontal: 8.px),
+                                              decoration: BoxDecoration(
+                                                color: Colors.white,
+                                                borderRadius:
+                                                    BorderRadius.circular(8.px),
+                                              ),
+                                              child: Row(
+                                                children: [
+                                                  SvgPicture.string(
+                                                    addCameraIcon,
+                                                    width: 32.px,
+                                                    height: 32.px,
+                                                    color:
+                                                        AppColors.primerColor,
+                                                  ),
+                                                  SizedBox(width: 8.px),
+                                                  Container(
+                                                    width: 1.px,
+                                                    height: 48.px,
+                                                    color: Colors.grey.shade300,
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                          SizedBox(width: 8.px),
+                                          for (var i = 0;
+                                              i < controller.imageList.length;
+                                              i++) ...[
+                                            Stack(
+                                              children: [
+                                                Container(
+                                                  width: 76.px,
+                                                  height: 76.px,
+                                                  decoration: BoxDecoration(
+                                                    color: Colors.white,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            8.px),
+                                                  ),
+                                                  child: ClipRRect(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            8.px),
+                                                    child: controller
+                                                            .imageList[i]
+                                                            .startsWith('http')
+                                                        ? CachedNetworkImage(
+                                                            imageUrl: controller
+                                                                .imageList[i],
+                                                            fit: BoxFit.cover,
+                                                          )
+                                                        : Image.file(
+                                                            File(controller
+                                                                .imageList[i]),
+                                                            fit: BoxFit.cover,
+                                                          ),
+                                                  ),
+                                                ),
+                                                Positioned(
+                                                  top: 4.px,
+                                                  right: 4.px,
+                                                  child: GestureDetector(
+                                                    onTap: () => controller
+                                                        .removeImage(i),
+                                                    child: Container(
+                                                      decoration: BoxDecoration(
+                                                        color: Colors.red,
+                                                        shape: BoxShape.circle,
+                                                      ),
+                                                      padding:
+                                                          EdgeInsets.all(2.px),
+                                                      child: Icon(Icons.close,
+                                                          size: 16.px,
+                                                          color: Colors.white),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
                                             ),
                                             SizedBox(width: 8.px),
-                                            Container(
-                                              width: 1.px,
-                                              height: 48.px,
-                                              color: Colors.grey.shade300,
-                                            ),
                                           ],
-                                        ),
-                                      ),
-                                    ),
-                                    SizedBox(width: 8.px),
-                                    for (var i = 0; i < controller.imageList.length; i++) ...[
-                                      Stack(
-                                        children: [
-                                          Container(
-                                            width: 76.px,
-                                            height: 76.px,
-                                            decoration: BoxDecoration(
-                                              color: Colors.white,
-                                              borderRadius: BorderRadius.circular(8.px),
-                                            ),
-                                            child: ClipRRect(
-                                              borderRadius: BorderRadius.circular(8.px),
-                                              child: controller.imageList[i].startsWith('http')
-                                                  ? CachedNetworkImage(
-                                                imageUrl: controller.imageList[i],
-                                                fit: BoxFit.cover,
-                                              )
-                                                  : Image.file(
-                                                File(controller.imageList[i]),
-                                                fit: BoxFit.cover,
-                                              ),
-                                            ),
-                                          ),
-                                          Positioned(
-                                            top: 4.px,
-                                            right: 4.px,
-                                            child: GestureDetector(
-                                              onTap: () => controller.removeImage(i),
-                                              child: Container(
-                                                decoration: BoxDecoration(
-                                                  color: Colors.red,
-                                                  shape: BoxShape.circle,
-                                                ),
-                                                padding: EdgeInsets.all(2.px),
-                                                child: Icon(Icons.close, size: 16.px, color: Colors.white),
-                                              ),
-                                            ),
-                                          ),
                                         ],
                                       ),
-                                      SizedBox(width: 8.px),
-                                    ],
-                                  ],
-                                ),
+                                    ),
+                                  ),
+                                  Spacer(),
+                                  Center(
+                                    child: SvgPicture.string(
+                                      successIcon,
+                                      width: 32.px,
+                                      height: 32.px,
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ),
-                            Spacer(),
-                            Center(
-                              child: SvgPicture.string(
-                                successIcon,
-                                width: 32.px,
-                                height: 32.px,
-                              ),
-                            ),
-                          ],
-                        ),
                       ),
                     ),
 
@@ -1482,21 +1530,30 @@ class InspireVHomeScreen extends StatelessWidget {
                           onPressed: () {
                             controller.resetSignatureState();
                             controller.imageList.clear();
-                            controller.imageUploadStatus = ImageUploadStatus.initial;
+                            controller.imageUploadStatus =
+                                ImageUploadStatus.initial;
                             Navigator.of(ctx).pop();
                           },
-                          child: Text('Cancel', style: TextStyle(fontSize: 16.px, color: AppColors.primerColor)),
+                          child: Text('Cancel',
+                              style: TextStyle(
+                                  fontSize: 16.px,
+                                  color: AppColors.primerColor)),
                         ),
-                        SizedBox(width: 32.px), // Adjust spacing between buttons as needed
+                        SizedBox(width: 32.px),
+                        // Adjust spacing between buttons as needed
                         CommonButton(
                           title: "Complete Inspection",
-                          onTap: isButtonEnabled ? () => Navigator.of(ctx).pop() : null,
-                          color: isButtonEnabled ? AppColors.primerColor : AppColors().border1,
-                          textColor: isButtonEnabled ? Colors.white : Colors.black,
+                          onTap: isButtonEnabled
+                              ? () => Navigator.of(ctx).pop()
+                              : null,
+                          color: isButtonEnabled
+                              ? AppColors.primerColor
+                              : AppColors().border1,
+                          textColor:
+                              isButtonEnabled ? Colors.white : Colors.black,
                         ),
                       ],
                     )
-
                   ],
                 ),
               );
@@ -1536,42 +1593,43 @@ class InspireVHomeScreen extends StatelessWidget {
               height: 150.px,
               child: isBlank
                   ? GestureDetector(
-                onTap: onTap,
-                child: Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SvgPicture.string(icSignEdit, width: 40.px, height: 40.px),
-                      SizedBox(height: 8.px),
-                      Text(
-                        'Tap to Sign',
-                        style: TextStyle(
-                          fontSize: 14.px,
-                          color: AppColors.primerColor,
+                      onTap: onTap,
+                      child: Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SvgPicture.string(icSignEdit,
+                                width: 40.px, height: 40.px),
+                            SizedBox(height: 8.px),
+                            Text(
+                              'Tap to Sign',
+                              style: TextStyle(
+                                fontSize: 14.px,
+                                color: AppColors.primerColor,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                    ],
-                  ),
-                ),
-              )
+                    )
                   : Screenshot(
-                controller: signController,
-                child: SfSignaturePad(
-                  key: signPadKey,
-                  minimumStrokeWidth: 2,
-                  maximumStrokeWidth: 4,
-                  strokeColor: Colors.black,
-                  backgroundColor: Colors.white,
-                  onDrawEnd: () {
-                    if (title.contains("Tenant")) {
-                      controller.isTenantBlank = false;
-                    } else {
-                      controller.isOwnerBlank = false;
-                    }
-                    controller.update();
-                  },
-                ),
-              ),
+                      controller: signController,
+                      child: SfSignaturePad(
+                        key: signPadKey,
+                        minimumStrokeWidth: 2,
+                        maximumStrokeWidth: 4,
+                        strokeColor: Colors.black,
+                        backgroundColor: Colors.white,
+                        onDrawEnd: () {
+                          if (title.contains("Tenant")) {
+                            controller.isTenantBlank = false;
+                          } else {
+                            controller.isOwnerBlank = false;
+                          }
+                          controller.update();
+                        },
+                      ),
+                    ),
             ),
           ),
         ),
@@ -1595,4 +1653,80 @@ class InspireVHomeScreen extends StatelessWidget {
     );
   }
 
+  Widget _buildCompletedInspectionsList(
+      InspireVHomeScreenController controller) {
+    return ListView.builder(
+      padding: EdgeInsets.symmetric(horizontal: 16.px, vertical: 8.px),
+      itemCount: controller.completedInspections.length,
+      itemBuilder: (_, idx) {
+        final item = controller.completedInspections[idx];
+        return _buildCompletedInspectionCard(item);
+      },
+    );
+  }
+
+  Widget _buildCompletedInspectionCard(CompletedInspectionItem item) {
+    return Card(
+      color: Colors.white,
+      margin: EdgeInsets.only(bottom: 12.px),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8.px),
+      ),
+      child: Padding(
+        padding: EdgeInsets.all(16.px),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Address + location
+            Text(
+              item.address,
+              style: TextStyle(
+                fontSize: 16.px,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            SizedBox(height: 4.px),
+            Text(
+              item.location,
+              style: TextStyle(
+                fontSize: 14.px,
+                color: Colors.grey[700],
+              ),
+            ),
+            SizedBox(height: 12.px),
+
+            // Date + time + status
+            Row(
+              children: [
+                // Calendar icon and date
+                Row(
+                  children: [
+                    Icon(Icons.calendar_today,
+                        size: 16.px, color: AppColors.primerColor),
+                    SizedBox(width: 4.px),
+                    Text(
+                      DateFormat('MM/dd/yyyy').format(item.date),
+                      style: TextStyle(fontSize: 14.px),
+                    ),
+                  ],
+                ),
+                SizedBox(width: 16.px),
+
+                // Clock icon and time
+                Row(
+                  children: [
+                    SvgPicture.string(clockIcon, height: 16.px, width: 16.px),
+                    SizedBox(width: 4.px),
+                    Text(item.timeRange, style: TextStyle(fontSize: 14.px)),
+                  ],
+                ),
+
+                Spacer(),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 }

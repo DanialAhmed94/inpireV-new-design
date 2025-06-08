@@ -44,7 +44,7 @@ import 'package:public_housing/screens/unit_list_screen/binding/unit_list_bindin
 import 'package:public_housing/screens/unit_list_screen/screen/unit_list_screen.dart';
 import '../screens/inspire-v-newdesign/addInspection/binding/addInspectionScreenBinding.dart';
 import '../screens/inspire-v-newdesign/addInspection/screen/addInspectionScreen.dart';
-import '../screens/inspire-v-newdesign/auth/binding/inpireV-auth_binding.dart';
+import '../screens/inspire-v-newdesign/auth/screen/binding/inpireV-auth_binding.dart';
 import '../screens/inspire-v-newdesign/auth/screen/inpireV-loginScreen.dart';
 import '../screens/inspire-v-newdesign/homeScreen/binding/inpireV-home_Binding.dart';
 import '../screens/inspire-v-newdesign/homeScreen/screen/inpireV-homeScreen.dart';

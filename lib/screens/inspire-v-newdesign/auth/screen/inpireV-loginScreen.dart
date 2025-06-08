@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../../commons/all.dart';
-import '../controller/inpireV_loginController.dart';
+import '../model/client_model_inspireV.dart';
+import 'controller/inpireV_loginController.dart';
 
 class InspireVSigningScreen extends GetView<InspireVSigningController> {
   const InspireVSigningScreen({Key? key}) : super(key: key);
@@ -57,59 +58,146 @@ class InspireVSigningScreen extends GetView<InspireVSigningController> {
                             SizedBox(height: 40),
 
                             // Client dropdown
+                            // Obx(() {
+                            //   final selected = controller.selectedClient.value;
+                            //   final list     = controller.clients;
+                            //
+                            //   return DropdownButtonFormField<String>(
+                            //     icon: Icon(Icons.keyboard_arrow_down_outlined, color: Colors.white),
+                            //     dropdownColor: Colors.white,
+                            //
+                            //
+                            //     selectedItemBuilder: (_) {
+                            //       return list.map((c) {
+                            //         return Text(
+                            //           c,
+                            //           style: TextStyle(
+                            //             color: Colors.white,       // ← selected text in white
+                            //             fontFamily: 'Roboto',
+                            //             fontWeight: FontWeight.w400,
+                            //             fontSize: 16,
+                            //           ),
+                            //         );
+                            //       }).toList();
+                            //     },
+                            //     // ————————————————————————
+                            //
+                            //     value: selected,
+                            //     hint: Text(
+                            //       'Select your client',
+                            //       style: TextStyle(color: Colors.white, fontSize: 16),
+                            //     ),
+                            //     items: list.map((c) {
+                            //       return DropdownMenuItem(
+                            //         value: c,
+                            //         child: Text(
+                            //           c,
+                            //           style: TextStyle(
+                            //             color: Colors.black,      // ← menu items in black
+                            //             fontFamily: 'Roboto',
+                            //             fontWeight: FontWeight.w400,
+                            //             fontSize: 16,
+                            //           ),
+                            //         ),
+                            //       );
+                            //     }).toList(),
+                            //     onChanged: (v) => controller.selectedClient.value = v,
+                            //     decoration: _inputDecoration(label: 'Client', hint: ''),
+                            //   );
+                            // }),
                             Obx(() {
-                              final selected = controller.selectedClient.value;
-                              final list     = controller.clients;
+                              final list = controller.clientList;
 
-                              return DropdownButtonFormField<String>(
+                              if (list.isEmpty) {
+                                return Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'No clients available. Check your internet connection.',
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                    SizedBox(height: 8),
+                                    ElevatedButton(
+                                      onPressed: controller.fetchTenants,
+                                      child: Text('Retry'),
+                                    ),
+                                  ],
+                                );
+                              }
+
+                              return DropdownButtonFormField<InspireTenant>(
+                                value: controller.selectedClient.value,
                                 icon: Icon(Icons.keyboard_arrow_down_outlined, color: Colors.white),
                                 dropdownColor: Colors.white,
-
-
                                 selectedItemBuilder: (_) {
-                                  return list.map((c) {
+                                  return list.map((tenant) {
                                     return Text(
-                                      c,
-                                      style: TextStyle(
-                                        color: Colors.white,       // ← selected text in white
-                                        fontFamily: 'Roboto',
-                                        fontWeight: FontWeight.w400,
-                                        fontSize: 16,
-                                      ),
+                                      tenant.name,
+                                      style: TextStyle(color: Colors.white, fontSize: 16),
                                     );
                                   }).toList();
                                 },
-                                // ————————————————————————
-
-                                value: selected,
                                 hint: Text(
                                   'Select your client',
                                   style: TextStyle(color: Colors.white, fontSize: 16),
                                 ),
-                                items: list.map((c) {
+                                items: list.map((tenant) {
                                   return DropdownMenuItem(
-                                    value: c,
+                                    value: tenant,
                                     child: Text(
-                                      c,
-                                      style: TextStyle(
-                                        color: Colors.black,      // ← menu items in black
-                                        fontFamily: 'Roboto',
-                                        fontWeight: FontWeight.w400,
-                                        fontSize: 16,
-                                      ),
+                                      tenant.name,
+                                      style: TextStyle(color: Colors.black, fontSize: 16),
                                     ),
                                   );
                                 }).toList(),
-                                onChanged: (v) => controller.selectedClient.value = v,
+                                onChanged: (tenant) {
+                                  if (tenant != null) controller.onClientSelected(tenant);
+                                },
                                 decoration: _inputDecoration(label: 'Client', hint: ''),
                               );
                             }),
+
 
                             gap,
 
                             // Username
                             TextFormField(
                               controller: controller.usernameController,
+                              focusNode: controller.usernameFocusNode,
+                              textInputAction: TextInputAction.next,
+                              onFieldSubmitted: (_) {
+                                // When user presses "next" on keyboard, move focus to password
+                                FocusScope.of(context).requestFocus(controller.passwordFocusNode);
+                              },
+                              onChanged: (value) {
+                                if (controller.utils
+                                    .isValidationEmpty(controller
+                                    .usernameController.text
+                                    .trim())) {
+                                  controller.isEmail = false;
+                                  controller.checked = false;
+                                  controller.update();
+                                }
+                                // else if (!controller.utils
+                                //     .emailValidator(controller
+                                //         .email.text
+                                //         .trim())) {
+                                //   controller.isEmail = false;
+                                //   controller.checked = false;
+                                //   controller.update();
+                                // }
+
+                                else {
+                                  controller.isEmail = true;
+                                  if (controller.isPass) {
+                                    controller.checked = true;
+                                  } else {
+                                    controller.checked = false;
+                                  }
+                                  controller.update();
+                                }
+                              },
+
                               style: TextStyle(color: Colors.white,
                                   fontFamily: 'Roboto',
                                   fontWeight: FontWeight.w400, // Regular
@@ -124,6 +212,38 @@ class InspireVSigningScreen extends GetView<InspireVSigningController> {
                             // Password
                             TextFormField(
                               controller: controller.passwordController,
+                              focusNode: controller.passwordFocusNode,
+                              textInputAction: TextInputAction.done,
+
+                              onChanged: (value) {
+                                if (controller.utils
+                                    .isValidationEmpty(controller
+                                    .passwordController.text
+                                    .trim())) {
+                                  controller.isEmail = false;
+                                  controller.checked = false;
+                                  controller.update();
+                                }
+                                // else if (!controller.utils
+                                //     .emailValidator(controller
+                                //         .email.text
+                                //         .trim())) {
+                                //   controller.isEmail = false;
+                                //   controller.checked = false;
+                                //   controller.update();
+                                // }
+
+                                else {
+                                  controller.isEmail = true;
+                                  if (controller.isPass) {
+                                    controller.checked = true;
+                                  } else {
+                                    controller.checked = false;
+                                  }
+                                  controller.update();
+                                }
+                              },
+
                               obscureText: true,
                               style: TextStyle( color: Colors.white,
                                   fontFamily: 'Roboto',
@@ -141,7 +261,18 @@ class InspireVSigningScreen extends GetView<InspireVSigningController> {
                               width: double.infinity,
                               height: 48,
                               child: OutlinedButton(
-                                onPressed: controller.onLoginTap,
+                                onPressed: (){
+                                  FocusScope.of(context).unfocus();
+
+                                  print("**** inside onpress");
+
+                                  if (controller.checked &&
+                                    controller.selectedClient!=null
+                                        )
+                                    print("**** inside onpress first if");
+
+                                  controller.validation();},
+                                //onPressed: controller.onLoginTap,
                                 style: OutlinedButton.styleFrom(
                                   side: BorderSide(color: Colors.white.withOpacity(0.2)),
                                   shape: RoundedRectangleBorder(

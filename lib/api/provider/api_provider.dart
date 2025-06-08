@@ -26,6 +26,10 @@ import 'package:public_housing/screens/special_amenities_screen/model/special_am
 import 'package:public_housing/screens/unit_inspection_summary_screen/models/create_inspection_model.dart';
 import 'package:public_housing/screens/building_inspection_screen/models/building_model.dart';
 
+import '../../screens/inspire-v-newdesign/auth/model/client_model_inspireV.dart';
+import '../../screens/inspire-v-newdesign/auth/model/inspector_model_inspireV.dart';
+import '../../screens/inspire-v-newdesign/auth/model/login_model_inspireV.dart';
+
 class ApiProviders extends BaseController {
   ApiBaseHelperImplementation apiBaseHelperImplementation =
       ApiBaseHelperImplementation();
@@ -89,6 +93,66 @@ class ApiProviders extends BaseController {
       return Left(createFailure(e));
     }
   }
+
+  // changed
+  Future<Either<Failure, LoginmodelInspireV>> loginRequest1(mapJson) async {
+    try {
+      Response response = await apiBaseHelperImplementation.post(
+          endPoint: Constants.login, body: mapJson);
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        return Right(LoginmodelInspireV.fromJson(response.data));
+      } else {
+        return Left(Failure(errorMessage: response.statusMessage.toString()));
+      }
+    } on DioException catch (e) {
+      return Left(createFailure(e));
+    }
+  }
+
+  Future<Either<Failure, InspectorModelInspireV>> createInspectorRequest1(
+      {required String name}) async {
+    try {
+      var mapJson = {"name": name};
+
+      Response response = await ApiBaseHelperImplementation().post(
+        endPoint: Constants.createInspector,
+        body: mapJson,
+        headers: {
+          'Authorization': '${getStorageData.readString(getStorageData.token)}',
+        },
+      );
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        return Right(InspectorModelInspireV.fromJson(response.data));
+      } else {
+        return Left(Failure(errorMessage: response.statusMessage.toString()));
+      }
+    } on DioException catch (e) {
+      return Left(createFailure(e));
+    }
+  }
+
+  Future<Either<Failure, List<InspireTenant>>> fetchTenants() async {
+    try {
+      final response = await apiBaseHelperImplementation.get(endPoint: 'https://public.dev.gccs.gilsonsoftware.com/api/inspire/tenants');
+
+      final data = response.data;
+      if (data is Map<String, dynamic> && data.containsKey('inspire_tenants')) {
+        final tenantsJson = data['inspire_tenants'] as List<dynamic>;
+        final tenants = tenantsJson
+            .map((json) => InspireTenant.fromJson(json as Map<String, dynamic>))
+            .toList();
+
+        return Right(tenants);
+      } else {
+        return Left(Failure(errorMessage: "Invalid response format"));
+      }
+    } on DioException catch (e) {
+      return Left(createFailure(e));
+    } catch (e) {
+      return Left(Failure(errorMessage: "Unexpected error: ${e.toString()}"));
+    }
+  }
+
 
   Future<Either<Failure, Loginmodel>> loginRequest(mapJson) async {
     try {

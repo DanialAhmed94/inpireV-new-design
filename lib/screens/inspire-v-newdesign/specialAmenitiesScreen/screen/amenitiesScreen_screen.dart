@@ -342,7 +342,7 @@ class InspireVAmenitiesScreen extends StatelessWidget {
                             CommonButton(
                               title: "Save",
                               onTap: () {
-
+                                  controller.onSvaveAminties();
                               },
                               color: AppColors().appColor,
                             ),

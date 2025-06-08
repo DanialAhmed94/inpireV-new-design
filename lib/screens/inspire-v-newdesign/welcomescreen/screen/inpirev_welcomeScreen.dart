@@ -36,15 +36,15 @@ class InspireVSelectionScreen extends GetView<InspireVSelectionController> {
                           const SizedBox(height: 16),
 
                           const SizedBox(height: 16),
-                          Obx(() => Text(
-                            'Welcome back, ${controller.userName.value}',
+                           Text(
+                            'Welcome back,  ${GetStorageData().readString(GetStorageData().clientName)}',
                             style: const TextStyle(
                               color: Colors.white,
                               fontSize: 20,
                               fontFamily: 'Roboto',
                               fontWeight: FontWeight.w400,
                             ),
-                          )),
+                          ),
                           const SizedBox(height: 32),
                           SizedBox(
                             width: double.infinity,

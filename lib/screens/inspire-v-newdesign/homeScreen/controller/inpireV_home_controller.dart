@@ -36,6 +36,10 @@ class InspireVHomeScreenController extends BaseController {
   List<String> imageList = [];
   ImageUploadStatus imageUploadStatus = ImageUploadStatus.initial;
   DateTime? selectedDateTime;
+  final completedInspections = <CompletedInspectionItem>[];
+
+  final Rxn<InspectionInProgress> currentInspection =
+      Rxn<InspectionInProgress>();
 
   @override
   void onInit() {
@@ -88,7 +92,27 @@ class InspireVHomeScreenController extends BaseController {
           comments: "4 of 10 cabinets are missing -PM"),
       // … add more …
     ]);
+    completedInspections.addAll([
+      CompletedInspectionItem(
+        address: '2113 Kendall Street',
+        location: 'South Bend, IN',
+        date: DateTime(2023, 6, 22),
+        timeRange: '08:00 - 10:00',
+        tagLabel: "",
+        tenantName: "",
+      ),
+      CompletedInspectionItem(
+        address: '2113 Kendall Street',
+        location: 'South Bend, IN',
+        date: DateTime(2023, 6, 22),
+        timeRange: '08:00 - 10:00',
+        tagLabel: "",
+        tenantName: "",
+      ),
+      // ... more completed items ...
+    ]);
   }
+
 // Signature Controllers
   ScreenshotController tenantSignController = ScreenshotController();
   ScreenshotController ownerSignController = ScreenshotController();
@@ -98,6 +122,7 @@ class InspireVHomeScreenController extends BaseController {
   bool isOwnerBlank = true;
   bool tenantSign = false;
   String tenantSignature = '';
+
 // Add these in your controller class
   void resetSignatureState() {
     isTenantBlank = true;
@@ -109,6 +134,7 @@ class InspireVHomeScreenController extends BaseController {
     clearOwnerSignature();
     update();
   }
+
   void startTenantSignature() {
     isTenantBlank = false;
     update();
@@ -125,7 +151,6 @@ class InspireVHomeScreenController extends BaseController {
     isOwnerBlank = true;
     update();
   }
-
 
   void startOwnerSignature() {
     isOwnerBlank = false;
@@ -162,16 +187,36 @@ class InspireVHomeScreenController extends BaseController {
     }
   }
 
-  void onStartInpectionTap() {
-    // for now just log to console
-    debugPrint('Start Inpection tapped → ');
+  void onStartInpectionTap(
+    String address,
+    String location,
+    DateTime date,
+      String timerange,
+      String tagLabel,
+      String tenantName
+  ) {
+    // Save the current inspection info
+    currentInspection.value = InspectionInProgress(
+      address: address,
+      location: location,
+      date: date,
+      timeRange: timerange,
+      tagLabel: tagLabel,
+      tenantName: tenantName,
+    );
+
     Get.toNamed(InspireVStandardScreen.routes);
   }
+
+  // void onStartInpectionTap() {
+  //   // for now just log to console
+  //   debugPrint('Start Inpection tapped → ');
+  //   Get.toNamed(InspireVStandardScreen.routes);
+  // }
   void onAddInspectionTap() {
     // for now just log to console
     debugPrint('Add Inpection tapped → ');
-    Get.toNamed(
-        InspireVAddInspectionScreen.routes);
+    Get.toNamed(InspireVAddInspectionScreen.routes);
   }
 
   actionPopUpItemSelected(int value) {
@@ -262,21 +307,43 @@ class InspireVHomeScreenController extends BaseController {
       ),
     );
   }
-Future<void>openGoogleMap(String latitude, String longitude, BuildContext context)async{
-  String googleMapsUrl = 'https://www.google.com/maps/dir/?api=1&destination=${latitude},${longitude}'; // Replace with actual coordinates
-  final Uri uri = Uri.parse(googleMapsUrl);
 
-  try {
-    if (await canLaunchUrl(uri)) {
-      await launchUrl(uri, mode: LaunchMode.externalApplication);
-    } else {
+  Future<void> openGoogleMap(
+      String latitude, String longitude, BuildContext context) async {
+    String googleMapsUrl =
+        'https://www.google.com/maps/dir/?api=1&destination=${latitude},${longitude}'; // Replace with actual coordinates
+    final Uri uri = Uri.parse(googleMapsUrl);
+
+    try {
+      if (await canLaunchUrl(uri)) {
+        await launchUrl(uri, mode: LaunchMode.externalApplication);
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              'Google Maps not installed. Please install Google Maps to use navigation',
+              style: TextStyle(color: Colors.white),
+            ),
+            behavior: SnackBarBehavior.floating,
+            backgroundColor: Colors.black87, // Light black
+            action: SnackBarAction(
+              label: 'OK',
+              textColor: Colors.orange,
+              onPressed: () {
+                ScaffoldMessenger.of(context).hideCurrentSnackBar();
+              },
+            ),
+          ),
+        );
+      }
+    } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
-            'Google Maps not installed. Please install Google Maps to use navigation',
-
+            'Error opening navigation: ${e.toString()}',
             style: TextStyle(color: Colors.white),
           ),
+
           behavior: SnackBarBehavior.floating,
           backgroundColor: Colors.black87, // Light black
           action: SnackBarAction(
@@ -288,33 +355,14 @@ Future<void>openGoogleMap(String latitude, String longitude, BuildContext contex
           ),
         ),
       );
-
-    }
-  } catch (e) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('Error opening navigation: ${e.toString()}', style: TextStyle(color: Colors.white),),
-
-        behavior: SnackBarBehavior.floating,
-        backgroundColor: Colors.black87, // Light black
-        action: SnackBarAction(
-          label: 'OK',
-          textColor: Colors.orange,
-          onPressed: () {
-            ScaffoldMessenger.of(context).hideCurrentSnackBar();
-          },
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Error opening navigation: ${e.toString()}'),
+          backgroundColor: Colors.red,
         ),
-      ),
-    );
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('Error opening navigation: ${e.toString()}'),
-        backgroundColor: Colors.red,
-      ),
-    );
+      );
+    }
   }
-}
-
 
   Future<void> getFromGallery() async {
     final pickedFile = await ImagePicker()
@@ -452,6 +500,45 @@ class InspectionItem {
     this.bathrooms = 1,
   });
 }
+
+class CompletedInspectionItem {
+  String address;
+  String location;
+  DateTime date;
+  String timeRange;
+  String tagLabel;
+  String tenantName;
+
+  CompletedInspectionItem({
+    required this.address,
+    required this.location,
+    required this.date,
+    required this.timeRange,
+    required this.tagLabel,
+    required this.tenantName,
+  });
+}
+
+class InspectionInProgress {
+  String address;
+  String location;
+  DateTime date;
+  String timeRange;
+  String tagLabel;
+  String tenantName;
+
+  // Add more fields as needed (e.g., address, photos, results, etc.)
+
+  InspectionInProgress({
+    required this.address,
+    required this.location,
+    required this.date,
+    required this.timeRange,
+    required this.tagLabel,
+    required this.tenantName,
+  });
+}
+
 // import 'dart:io';
 // import 'dart:typed_data';
 //

@@ -98,6 +98,7 @@ class InspireVAddInspectionScreenController extends BaseController {
   }
 
   Future<void> addInspectionTap() async {
+    debugPrint("Add inspection tapped");
     // Get the HomeController instance
     final homeController = Get.find<InspireVHomeScreenController>();
 
